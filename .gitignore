@@ -1,0 +1,17 @@
+# Dependências
+node_modules/
+
+# Binários grandes de firmware (não subir arquivos brutos para o repositório público)
+firmware/original/*.bin
+firmware/original/*.pkg
+firmware/modified/*.bin
+*.bin
+
+# Mas manter os arquivos de documentação e pastas de firmware
+!firmware/**/.gitkeep
+!firmware/**/*.json
+
+# Logs e arquivos temporários do sistema
+*.log
+.DS_Store
+Thumbs.db

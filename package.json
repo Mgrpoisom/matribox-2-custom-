@@ -1,0 +1,27 @@
+{
+  "name": "matribox2-custom-firmware",
+  "version": "1.0.0",
+  "description": "Custom Firmware & Modding Toolkit para Sonicake Matribox II (QME-100)",
+  "main": "modules/core/guardrail.js",
+  "scripts": {
+    "inspect": "node modules/core/htfw_parser.js",
+    "guardrail": "node modules/core/guardrail.js",
+    "translate": "node modules/translation_ptbr/apply_ptbr.js",
+    "tremolo": "node modules/pattern_tremolo/tremolo_inspector.js",
+    "scenes": "node modules/midi_scenes/scenes_controller.js"
+  },
+  "keywords": [
+    "matribox",
+    "sonicake",
+    "firmware",
+    "custom-firmware",
+    "dsp",
+    "midi",
+    "guitar-effects"
+  ],
+  "authors": [
+    "Mgrpoisom",
+    "CesarMalak"
+  ],
+  "license": "MIT"
+}
