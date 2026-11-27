@@ -19,7 +19,7 @@ Acesse e baixe os arquivos binários finais prontos para carregar no software da
 | Versão | Modificações Incluídas | Status | Download Direto (.bin) |
 |---|---|---|---|
 | **v1.3.0-PTBR-v1.1** | Tradução nativa completa de 105 termos + Seletor **Português** | ✅ Validado em Hardware | [📥 **Baixar QME-100_PTBR_V1.3.0.bin**](https://github.com/Mgrpoisom/matribox-2-custom-/raw/main/firmware/modified/QME-100_PTBR_V1.3.0.bin) |
-| **v1.3.0-WHITELED-v1.2-BETA**| PT-BR + **Tap Tempo com LED Branco Puro** (Build de Testes) | 🧪 Em testes ativos | [📥 **Baixar QME-100_WHITELED_BETA_V1.3.0.bin**](https://github.com/Mgrpoisom/matribox-2-custom-/raw/main/firmware/modified/QME-100_WHITELED_BETA_V1.3.0.bin) |
+| **v1.3.0-WHITELED-v1.2**| PT-BR + **Tap Tempo com LED Branco Puro** (Versão Oficial) | ✅ Aprovado Guardrail | [📥 **Baixar QME-100_WHITELED_V1.3.0.bin**](https://github.com/Mgrpoisom/matribox-2-custom-/raw/main/firmware/modified/QME-100_WHITELED_V1.3.0.bin) |
 | **v1.3.0-TREM-v1.3** | PT-BR + White LED + **Pattern Tremolo** (Speed Ramp & Slicer) | ⏳ Em planejamento | *Em breve* |
 | **v1.3.0-STEREO-v1.4**| Recursos anteriores + **Stereolizer (Haas Effect)** | ⏳ Em planejamento | *Em breve* |
 | **v1.3.0-DUALMOD-v1.5**| Recursos anteriores + **Duas Modulações Simultâneas** | ⏳ Em planejamento | *Em breve* |
