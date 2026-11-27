@@ -10,6 +10,21 @@
 
 ---
 
+## 📦 Downloads & Versões Disponíveis
+
+Acompanhe as versões e baixe os arquivos binários prontos para gravação na central de lançamentos:
+👉 **[Ver Histórico Completo de Downloads (RELEASES.md)](RELEASES.md)**
+
+| Versão | Modificações Incluídas | Status | Link |
+|---|---|---|---|
+| **v1.3.0-PTBR-v1.0** | Tradução nativa completa para **Português do Brasil (PT-BR)** | ✅ Validado | [Download v1.3.0-PTBR-v1.0](https://github.com/Mgrpoisom/matribox-2-custom-/releases/tag/v1.3.0-ptbr-v1.0) |
+| **v1.3.0-TREM-v1.1** | PT-BR + **Pattern Tremolo** (Speed Ramp & Slicer) | ⏳ Em desenvolvimento | *Em breve* |
+| **v1.3.0-STEREO-v1.2**| PT-BR + Pattern Tremolo + **Stereolizer (Haas)** | ⏳ Em desenvolvimento | *Em breve* |
+| **v1.3.0-DUALMOD-v1.3**| PT-BR + Tremolo + Stereo + **Duas Modulações** | ⏳ Em desenvolvimento | *Em breve* |
+| **v1.3.0-AMPERO-v2.0** | Todos os anteriores + **Algoritmos Ampero Stomp 2** + **EXP 2 Dual FS** | ⏳ Em planejamento | *Em breve* |
+
+---
+
 ## 📌 Visão Geral do Projeto
 
 A **Sonicake Matribox II (QME-100)** utiliza a arquitetura de contêiner `HTFW` (Hotone Firmware). Este projeto visa transformar a pedaleira em uma plataforma aberta e altamente flexível, superando as travas de fábrica com **guardrails estritos de segurança anti-brick**.
@@ -64,9 +79,12 @@ matribox 2 custom/
 │   ├── original/          # Firmware oficial de fábrica (QME-100 V1.3.0)
 │   ├── extracted/         # Partições desmontadas para análise
 │   └── modified/          # Firmwares compilados e aprovados pelos guardrails
-└── docs/
-    ├── ARCHITECTURE.md    # Mapeamento técnico da memória, DSP e partições
-    └── SAFETY_GUIDE.md    # Prevenção de falhas e guia de recuperação
+├── docs/
+│   ├── ARCHITECTURE.md    # Mapeamento técnico da memória, DSP e partições
+│   └── SAFETY_GUIDE.md    # Prevenção de falhas e guia de recuperação
+├── RELEASES.md            # Histórico de versões e links de download
+├── package.json           # Scripts de automação npm
+└── README.md              # Documentação principal
 ```
 
 ---
