@@ -7,7 +7,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const inFile = 'F:\\a-projetos\\matribox 2 custom\\firmware\\modified\\QME-100_PATTERN_TREM_V1.3.0.bin';
+const inFile = 'F:\\a-projetos\\matribox 2 custom\\firmware\\modified\\QME-100_PTBR_V1.3.0.bin';
 const outDir = 'F:\\a-projetos\\matribox 2 custom\\firmware\\modified';
 const outFile = path.join(outDir, 'QME-100_FW_STEREO_VU_BETA.bin');
 
