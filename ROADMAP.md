@@ -8,31 +8,28 @@
 
 ## 🎯 Especificação Detalhada das Features
 
-### 1. Sistema de Cenas (Scenes / Snapshots)
-- Alternância de múltiplos blocos e parâmetros com 1 toque de footswitch.
-- Sem corte de áudio (*audio gap*).
-- Preservação de caudas de ambiência (Delay/Reverb spillover).
+### 1. Customização de Cor do LED: Tap Tempo Branco Puro (White LED Mod)
+- **Status:** Em desenvolvimento ativo.
+- **Objetivo:** Substituir a pulsação do LED do Tap Tempo (atualmente Amarelo: `R=255, G=255, B=0`) para **Branco Puro** (`R=255, G=255, B=255`).
+- **Alvo:** Rotina do temporizador de pulso de BPM na Partição 0 (`0x00700000`).
 
-### 2. Módulo Stereolizer (Haas Effect)
-- Implementação de atraso estéreo de milissegundos (12ms a 25ms) no canal R.
-- Efeito de guitarra dobrada em estéreo real (L/R separados).
+### 2. Sistema de Cenas (Scenes / Snapshots)
+- Alternância de múltiplos blocos e parâmetros com 1 toque de footswitch sem corte de áudio (*audio gap*).
 
-### 3. Pattern Tremolo (LFO Rítmico Dinâmico)
-- Aceleração e desaceleração cíclica automática da velocidade de oscilação (*Speed Ramp*).
-- Modo *Slicer* com subdivisões rítmicas e cortes em passos (*step-sequencer*).
+### 3. Módulo Stereolizer (Haas Effect)
+- Implementação de atraso estéreo de milissegundos (12ms a 25ms) no canal R para efeito de guitarra dobrada em estéreo real.
 
-### 4. Duas Modulações Simultâneas (Dual MOD Chain)
-- Remoção da trava do DSP na Partição 0 para alocação de 2 blocos de modulação no mesmo preset (ex: Chorus + Tremolo).
+### 4. Pattern Tremolo (LFO Rítmico Dinâmico)
+- Aceleração e desaceleração cíclica automática da velocidade (*Speed Ramp*) e cortes rítmicos em passos (*Slicer*).
 
-### 5. Algoritmos Portados da Ampero Stomp 2
-- Injeção de modelos de amplificadores, caixas e drives do ecossistema Ampero Stomp 2 na Partição 3.
+### 5. Duas Modulações Simultâneas (Dual MOD Chain)
+- Remoção da trava do DSP na Partição 0 para alocação de 2 blocos de modulação no mesmo preset.
 
-### 6. Suporte a Dual Footswitch na EXP 2 (CTRL 4 & CTRL 5)
-- Leitura analógica/digital na entrada EXP 2 para suportar pedal duplo de footswitch.
-- Mapeamento de dois botões adicionais no modo Stomp: **CTRL 4** e **CTRL 5**.
+### 6. Algoritmos Portados da Ampero Stomp 2
+- Injeção de modelos de amplificadores, caixas e drives da Ampero Stomp 2 na Partição 3.
 
-### 7. Tradução Completa para PT-BR
-- Menus, configurações globais e alertas totalmente em Português do Brasil com alinhamento de memória e *Null-Padding*.
+### 7. Suporte a Dual Footswitch na EXP 2 (CTRL 4 & CTRL 5)
+- Mapeamento de dois botões adicionais no modo Stomp através da entrada de expressão.
 
-### 8. Validação por Guardrails Anti-Brick
-- Nenhuma compilação é liberada para teste sem validação de tamanho (`5.447.156 bytes`), alinhamento e offsets.
+### 8. Tradução Completa para PT-BR
+- **Status:** ✅ Concluído e testado com sucesso em hardware real (`v1.3.0-ptbr-v1.1`).
