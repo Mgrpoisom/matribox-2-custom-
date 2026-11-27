@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sonicake Matribox II - Simulador Oficial de Firmware</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets_data.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Teko:wght@600;700&display=swap');
+    
+    body {
+      background: radial-gradient(circle at 50% 20%, #1e222b 0%, #0d0f14 100%);
+      font-family: 'Share Tech Mono', monospace;
+    }
+    .teko-font {
+      font-family: 'Teko', sans-serif;
+    }
+    .led-dot-single {
+      width: 9px;
+      height: 3px;
+      border-radius: 1px;
+      margin-bottom: 2px;
+      transition: all 0.04s ease-out;
+    }
+    .led-dot-dual {
+      width: 4px;
+      height: 3px;
+      border-radius: 1px;
+      margin-bottom: 2px;
+      transition: all 0.04s ease-out;
+    }
+    .led-off {
+      background-color: #141a14;
+      opacity: 0.25;
+    }
+    .led-green {
+      background-color: #22c55e;
+      box-shadow: 0 0 4px #22c55e;
+    }
+    .led-yellow {
+      background-color: #eab308;
+      box-shadow: 0 0 5px #eab308;
+    }
+    .led-red {
+      background-color: #ef4444;
+      box-shadow: 0 0 6px #ef4444;
+    }
+    .lcd-screen {
+      background: #0f131a;
+      border: 3px solid #232a35;
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.9), 0 4px 20px rgba(0,0,0,0.6);
+    }
+    .footswitch {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #94a3b8 0%, #475569 50%, #1e293b 100%);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.7), inset 0 2px 4px rgba(255,255,255,0.4);
+      cursor: pointer;
+      transition: transform 0.08s ease, filter 0.08s ease;
+    }
+    .footswitch:active {
+      transform: scale(0.94);
+      filter: brightness(0.85);
+    }
+    .halo-led {
+      box-shadow: 0 0 16px currentColor;
+    }
+    .knob {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #475569 0%, #1e293b 80%, #0f172a 100%);
+      border: 2px solid #334155;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.8);
+    }
+    .knob-marker {
+      width: 2px;
+      height: 12px;
+      background: #e2e8f0;
+      border-radius: 1px;
+    }
+  </style>
+</head>
+<body class="text-neutral-200 min-h-screen flex flex-col items-center justify-start p-4 select-none">
+
+  <!-- TOP BAR COM STATUS -->
+  <div class="w-full max-w-4xl flex items-center justify-between py-2 border-b border-neutral-800 text-xs mb-4">
+    <div class="flex items-center gap-2">
+      <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+      <span class="font-bold text-neutral-100 tracking-wider">MATRIBOX II • SIMULADOR DE FIRMWARE V1.3</span>
+      <span class="px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-400 border border-emerald-500/40 text-[10px]">168 Assets Reais Carregados</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <button id="btnToggleAssetGallery" class="px-3 py-1 rounded bg-neutral-800 hover:bg-neutral-700 text-neutral-300 text-xs border border-neutral-700 transition">
+        📂 Ver 168 Bitmaps Reais
+      </button>
+      <span class="text-neutral-400 text-xs font-mono">Resolução: 480x272</span>
+    </div>
+  </div>
+
+  <!-- CHASSIS DA PEDALEIRA (GABINETE REALÍSTICO) -->
+  <div class="relative w-full max-w-3xl bg-neutral-900 rounded-3xl border-4 border-neutral-700 p-6 shadow-2xl space-y-6">
+    
+    <!-- HEADER DA CARCAÇA -->
+    <div class="flex justify-between items-center px-2">
+      <div class="flex items-center gap-3">
+        <span class="teko-font text-3xl tracking-widest text-neutral-300 font-bold leading-none">SONICAKE</span>
+        <span class="text-xs tracking-widest uppercase text-amber-500 font-bold bg-amber-950/60 border border-amber-500/40 px-2 py-0.5 rounded">
+          MATRIBOX II
+        </span>
+      </div>
+      <div class="flex items-center gap-4">
+        <!-- Knob Master -->
+        <div class="flex flex-col items-center">
+          <div class="knob flex items-start justify-center pt-1.5 transform rotate-[-35deg]">
+            <div class="knob-marker"></div>
+          </div>
+          <span class="text-[9px] font-bold text-neutral-400 mt-1 uppercase">Master</span>
+        </div>
+        <!-- Knob Para -->
+        <div class="flex flex-col items-center">
+          <div class="knob flex items-start justify-center pt-1.5 transform rotate-[20deg]">
+            <div class="knob-marker"></div>
+          </div>
+          <span class="text-[9px] font-bold text-neutral-400 mt-1 uppercase">Para</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TELA LCD NATIVA (480x272) -->
+    <div class="lcd-screen relative rounded-xl p-4 text-neutral-100 overflow-hidden">
+      
+      <!-- Linha de Cabeçalho do LCD -->
+      <div class="flex items-center justify-between border-b border-neutral-800 pb-2 mb-3 pr-10">
+        <div class="flex items-center gap-3">
+          <span id="lcdPresetNumber" class="text-3xl font-black tracking-tight text-amber-400 drop-shadow">01 A</span>
+          <div class="border border-amber-500 bg-amber-500/15 px-2.5 py-0.5 rounded text-xs font-bold text-amber-300">
+            Modo Stomp
+          </div>
+        </div>
+
+        <!-- Badges de Volume, BPM e o NOVO MEDIDOR DE DSP % -->
+        <div class="flex items-center gap-4 text-xs font-semibold">
+          <!-- MEDIDOR DE CONSUMO DE DSP % -->
+          <div id="badgeDsp" class="flex items-center gap-1.5 px-2.5 py-0.5 rounded border border-emerald-500/70 bg-emerald-950/60 text-emerald-300 font-mono text-xs font-bold shadow-sm">
+            <span class="text-[9px] text-emerald-400 uppercase">DSP</span>
+            <span id="txtDspVal">54%</span>
+          </div>
+
+          <!-- Volume Geral -->
+          <div class="flex items-center gap-1.5 text-neutral-300">
+            <svg class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M17.95 6.05a8 8 0 010 11.9M6.5 9H4a1 1 0 00-1 1v4a1 1 0 001 1h2.5l4 4V5l-4 4z"/></svg>
+            <span id="lcdVolume">50</span>
+          </div>
+
+          <!-- BPM -->
+          <div class="flex items-center gap-1.5 text-neutral-300">
+            <svg class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span id="lcdBpm">68</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CADEIA DE BLOCOS DE EFEITO (CLICÁVEIS COM ÍCONES REAIS DO FIRMWARE) -->
+      <div class="grid grid-cols-4 gap-3 mb-3 pr-11">
+        <!-- FX 1 -->
+        <div id="pedalFx1" class="fx-card bg-cyan-700/80 rounded-lg p-2 flex flex-col justify-between h-20 shadow cursor-pointer border-2 border-cyan-400/50 hover:brightness-110 transition">
+          <div class="flex justify-between items-center">
+            <span class="text-[10px] font-bold uppercase text-cyan-200">FX 1</span>
+            <span class="text-[9px] bg-cyan-950/80 text-cyan-300 px-1 rounded font-mono">+8%</span>
+          </div>
+          <div class="flex justify-center items-center h-9">
+            <img id="iconFx1" class="h-9 w-9 object-contain" alt="FX1">
+          </div>
+          <span class="text-[10px] text-center font-bold text-cyan-100 truncate">Compressor</span>
+        </div>
+
+        <!-- RVB -->
+        <div id="pedalRvb" class="fx-card bg-neutral-700/90 rounded-lg p-2 flex flex-col justify-between h-20 shadow cursor-pointer border-2 border-neutral-400/50 hover:brightness-110 transition">
+          <div class="flex justify-between items-center">
+            <span class="text-[10px] font-bold uppercase text-neutral-200">RVB</span>
+            <span class="text-[9px] bg-neutral-900/80 text-neutral-300 px-1 rounded font-mono">+20%</span>
+          </div>
+          <div class="flex justify-center items-center h-9">
+            <img id="iconRvb" class="h-9 w-9 object-contain" alt="RVB">
+          </div>
+          <span class="text-[10px] text-center font-bold text-neutral-100 truncate">Shimmer</span>
+        </div>
+
+        <!-- FX 2 -->
+        <div id="pedalFx2" class="fx-card bg-rose-700/80 rounded-lg p-2 flex flex-col justify-between h-20 shadow cursor-pointer border-2 border-rose-400/50 hover:brightness-110 transition">
+          <div class="flex justify-between items-center">
+            <span class="text-[10px] font-bold uppercase text-rose-200">FX 2</span>
+            <span class="text-[9px] bg-rose-950/80 text-rose-300 px-1 rounded font-mono">+12%</span>
+          </div>
+          <div class="flex justify-center items-center h-9">
+            <img id="iconFx2" class="h-9 w-9 object-contain" alt="FX2">
+          </div>
+          <span class="text-[10px] text-center font-bold text-rose-100 truncate">Plexi OD</span>
+        </div>
+
+        <!-- AMP -->
+        <div id="pedalAmp" class="fx-card bg-amber-100 text-neutral-900 rounded-lg p-2 flex flex-col justify-between h-20 shadow cursor-pointer border-2 border-amber-400 hover:brightness-110 transition">
+          <div class="flex justify-between items-center">
+            <span class="text-[10px] font-black uppercase text-neutral-800">AMP</span>
+            <span class="text-[9px] bg-amber-300/80 text-neutral-950 font-bold px-1 rounded font-mono">+24%</span>
+          </div>
+          <div class="flex justify-center items-center h-9">
+            <img id="iconAmp" class="h-9 w-9 object-contain" alt="AMP">
+          </div>
+          <span class="text-[10px] text-center font-black text-neutral-900 truncate">UK 800</span>
+        </div>
+      </div>
+
+      <!-- Barra de Instruções no LCD -->
+      <div class="bg-neutral-800/90 border border-neutral-700 rounded px-3 py-1.5 text-xs flex justify-between items-center pr-11">
+        <span class="text-neutral-400 font-mono">Preset: <b class="text-amber-400 font-bold">Rock Lead PT-BR</b></span>
+        <span class="text-emerald-400 font-mono text-[11px]">Saída Estéreo (Dual L || R) Ativa</span>
+      </div>
+
+      <!-- PAINEL VERTICAL DE VU METERS (Borda Direita do Display) -->
+      <div class="absolute right-2 top-3 bottom-3 flex flex-col justify-between items-center w-8 bg-black/80 rounded px-1 py-1.5 border border-neutral-800 shadow-inner">
+        
+        <!-- SEÇÃO 1: ENTRADA (INPUT) NATIVA PRESERVADA NO TOPO -->
+        <div class="flex flex-col items-center">
+          <span class="text-[8px] font-black text-cyan-400 mb-0.5 tracking-tighter">IN</span>
+          <div id="meterIn" class="flex flex-col-reverse">
+            <!-- 14 bolinhas de Entrada -->
+          </div>
+        </div>
+
+        <!-- SEPARADOR NÍTIDO -->
+        <div class="w-full h-px bg-neutral-700 my-0.5"></div>
+
+        <!-- SEÇÃO 2: SAÍDA COM DUAS LINHAS PARALELAS LADO A LADO (L || R) -->
+        <div class="flex flex-col items-center w-full">
+          <div class="flex justify-between w-full px-0.5 mb-0.5">
+            <span class="text-[7px] font-black text-emerald-400">L</span>
+            <span class="text-[7px] font-black text-emerald-400">R</span>
+          </div>
+          <div class="flex justify-between w-full px-0.5">
+            <div id="meterL" class="flex flex-col-reverse">
+              <!-- Coluna L -->
+            </div>
+            <div id="meterR" class="flex flex-col-reverse">
+              <!-- Coluna R -->
+            </div>
+          </div>
+          <span class="text-[7px] font-bold text-neutral-400 mt-0.5 uppercase tracking-tighter">OUT</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- 3 FOOTSWITCHES REAIS DE METAL COM HALO LED COLORIDO -->
+    <div class="grid grid-cols-3 gap-6 pt-4 px-8 border-t border-neutral-800">
+      
+      <!-- FOOTSWITCH 1 -->
+      <div class="flex flex-col items-center gap-2">
+        <div id="halo1" class="rounded-full p-2 text-cyan-400 halo-led transition-all">
+          <div id="fs1" class="footswitch flex items-center justify-center">
+            <div class="w-4 h-4 rounded-full border border-neutral-400/30"></div>
+          </div>
+        </div>
+        <span class="text-xs font-bold text-neutral-400 uppercase tracking-wider">FS 1 (FX 1)</span>
+      </div>
+
+      <!-- FOOTSWITCH 2 -->
+      <div class="flex flex-col items-center gap-2">
+        <div id="halo2" class="rounded-full p-2 text-rose-500 halo-led transition-all">
+          <div id="fs2" class="footswitch flex items-center justify-center">
+            <div class="w-4 h-4 rounded-full border border-neutral-400/30"></div>
+          </div>
+        </div>
+        <span class="text-xs font-bold text-neutral-400 uppercase tracking-wider">FS 2 (FX 2)</span>
+      </div>
+
+      <!-- FOOTSWITCH 3 -->
+      <div class="flex flex-col items-center gap-2">
+        <div id="halo3" class="rounded-full p-2 text-amber-400 halo-led transition-all">
+          <div id="fs3" class="footswitch flex items-center justify-center">
+            <div class="w-4 h-4 rounded-full border border-neutral-400/30"></div>
+          </div>
+        </div>
+        <span class="text-xs font-bold text-neutral-400 uppercase tracking-wider">FS 3 (AMP)</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- CONTROLES DE SIMULAÇÃO DE ÁUDIO -->
+  <div class="w-full max-w-3xl bg-neutral-900 border border-neutral-800 rounded-2xl p-4 mt-4 space-y-3">
+    <div class="flex justify-between items-center text-xs">
+      <span class="font-bold text-neutral-300">Testar Comportamento das Linhas L || R</span>
+      <span id="txtAudioPattern" class="text-emerald-400 font-mono">Modo: Ping-Pong Delay (L ⇄ R)</span>
+    </div>
+    
+    <div class="grid grid-cols-3 gap-3">
+      <button id="btnPingPong" class="py-2 px-3 rounded-lg bg-emerald-950/60 border border-emerald-500/50 text-emerald-300 text-xs font-bold hover:bg-emerald-900/60 transition">
+        🏓 Ping-Pong Delay
+      </button>
+      <button id="btnReverb" class="py-2 px-3 rounded-lg bg-neutral-800 border border-neutral-700 text-neutral-200 text-xs font-bold hover:border-neutral-500 transition">
+        🌌 Reverb Estéreo
+      </button>
+      <button id="btnStrum" class="py-2 px-3 rounded-lg bg-amber-950/60 border border-amber-500/50 text-amber-300 text-xs font-bold hover:bg-amber-900/60 transition">
+        🎸 Palhetada Forte (Peak)
+      </button>
+    </div>
+
+    <div class="space-y-1 pt-1">
+      <div class="flex justify-between text-xs text-neutral-400">
+        <span>Canal L (Esquerda)</span>
+        <span id="txtPan" class="font-mono text-neutral-200 font-bold">Balanço Central (50 / 50)</span>
+        <span>Canal R (Direita)</span>
+      </div>
+      <input id="panSlider" type="range" min="0" max="100" value="50" class="w-full h-2 bg-neutral-800 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+    </div>
+  </div>
+
+  <!-- MODAL / GAVETA COM OS 168 ASSETS REAIS DO FIRMWARE -->
+  <div id="galleryModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-6">
+    <div class="bg-neutral-900 border border-neutral-700 rounded-2xl w-full max-w-4xl max-h-[85vh] flex flex-col p-6 shadow-2xl">
+      <div class="flex justify-between items-center pb-4 border-b border-neutral-800">
+        <div>
+          <h2 class="text-lg font-bold text-neutral-100">Galeria de Assets Oficiais Extraídos do Firmware</h2>
+          <p class="text-xs text-neutral-400">168 ícones e imagens originais extraídos diretamente da Partição 0 (NXP i.MX RT SDRAM)</p>
+        </div>
+        <button id="btnCloseGallery" class="px-3 py-1 rounded bg-neutral-800 hover:bg-neutral-700 text-neutral-300 text-xs font-bold">
+          Fechar ✕
+        </button>
+      </div>
+      <div id="galleryGrid" class="grid grid-cols-8 gap-3 py-4 overflow-y-auto max-h-[60vh] pr-2">
+        <!-- Injetado dinamicamente via JS -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DOTS = 14;
+    let mode = 'pingpong';
+    let pan = 0.5;
+    let phase = 0;
+    let inLevel = 0.5;
+    let lLevel = 0;
+    let rLevel = 0;
+
+    // Estado dos Pedais (Ligar/Desligar) e Consumo de DSP
+    const pedals = {
+      fx1: { on: true, cost: 8, el: document.getElementById('pedalFx1'), halo: document.getElementById('halo1') },
+      rvb: { on: true, cost: 20, el: document.getElementById('pedalRvb'), halo: null },
+      fx2: { on: true, cost: 12, el: document.getElementById('pedalFx2'), halo: document.getElementById('halo2') },
+      amp: { on: true, cost: 24, el: document.getElementById('pedalAmp'), halo: document.getElementById('halo3') }
+    };
+
+    // Montar os dots dos medidores
+    function makeDots(container, isDual) {
+      container.innerHTML = '';
+      for (let i = 0; i < DOTS; i++) {
+        const d = document.createElement('div');
+        d.className = (isDual ? 'led-dot-dual' : 'led-dot-single') + ' led-off';
+        container.appendChild(d);
+      }
+    }
+
+    const meterIn = document.getElementById('meterIn');
+    const meterL = document.getElementById('meterL');
+    const meterR = document.getElementById('meterR');
+    makeDots(meterIn, false);
+    makeDots(meterL, true);
+    makeDots(meterR, true);
+
+    function setMeter(container, val, isDual) {
+      const active = Math.round(val * DOTS);
+      const dots = container.querySelectorAll(isDual ? '.led-dot-dual' : '.led-dot-single');
+      dots.forEach((dot, idx) => {
+        dot.className = isDual ? 'led-dot-dual' : 'led-dot-single';
+        if (idx < active) {
+          if (idx >= 12) dot.classList.add('led-red');
+          else if (idx >= 9) dot.classList.add('led-yellow');
+          else dot.classList.add('led-green');
+        } else {
+          dot.classList.add('led-off');
+        }
+      });
+    }
+
+    // Carregar Ícones Reais Extraídos
+    if (window.MATRIBOX_ASSETS) {
+      const keys = Object.keys(window.MATRIBOX_ASSETS);
+      // Atribuir ícones reais aos pedais
+      if (keys[0]) document.getElementById('iconFx1').src = window.MATRIBOX_ASSETS[keys[0]].dataUrl;
+      if (keys[1]) document.getElementById('iconRvb').src = window.MATRIBOX_ASSETS[keys[1]].dataUrl;
+      if (keys[2]) document.getElementById('iconFx2').src = window.MATRIBOX_ASSETS[keys[2]].dataUrl;
+      if (keys[3]) document.getElementById('iconAmp').src = window.MATRIBOX_ASSETS[keys[3]].dataUrl;
+
+      // Montar a galeria completa
+      const grid = document.getElementById('galleryGrid');
+      keys.forEach((k, idx) => {
+        const item = window.MATRIBOX_ASSETS[k];
+        const card = document.createElement('div');
+        card.className = 'bg-neutral-800 p-2 rounded flex flex-col items-center justify-center border border-neutral-700';
+        card.innerHTML = `
+          <img src="${item.dataUrl}" class="max-h-12 object-contain mb-1" alt="${k}">
+          <span class="text-[9px] font-mono text-neutral-400 truncate w-full text-center">${item.width}x${item.height}</span>
+          <span class="text-[8px] font-mono text-neutral-400">#${idx + 1}</span>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // Recalcular consumo de DSP %
+    function updateDsp() {
+      let total = 14; // Base do SO
+      if (pedals.fx1.on) total += pedals.fx1.cost;
+      if (pedals.rvb.on) total += pedals.rvb.cost;
+      if (pedals.fx2.on) total += pedals.fx2.cost;
+      if (pedals.amp.on) total += pedals.amp.cost;
+
+      const txt = document.getElementById('txtDspVal');
+      const badge = document.getElementById('badgeDsp');
+      txt.textContent = total + '%';
+
+      if (total >= 85) {
+        badge.className = 'flex items-center gap-1.5 px-2.5 py-0.5 rounded border border-rose-500/70 bg-rose-950/60 text-rose-300 font-mono text-xs font-bold shadow-sm';
+      } else if (total >= 65) {
+        badge.className = 'flex items-center gap-1.5 px-2.5 py-0.5 rounded border border-amber-500/70 bg-amber-950/60 text-amber-300 font-mono text-xs font-bold shadow-sm';
+      } else {
+        badge.className = 'flex items-center gap-1.5 px-2.5 py-0.5 rounded border border-emerald-500/70 bg-emerald-950/60 text-emerald-300 font-mono text-xs font-bold shadow-sm';
+      }
+    }
+
+    function togglePedal(key) {
+      const p = pedals[key];
+      p.on = !p.on;
+      if (p.on) {
+        p.el.classList.remove('opacity-40', 'grayscale');
+        if (p.halo) p.halo.classList.add('halo-led');
+      } else {
+        p.el.classList.add('opacity-40', 'grayscale');
+        if (p.halo) p.halo.classList.remove('halo-led');
+      }
+      updateDsp();
+    }
+
+    document.getElementById('pedalFx1').onclick = () => togglePedal('fx1');
+    document.getElementById('pedalRvb').onclick = () => togglePedal('rvb');
+    document.getElementById('pedalFx2').onclick = () => togglePedal('fx2');
+    document.getElementById('pedalAmp').onclick = () => togglePedal('amp');
+
+    document.getElementById('fs1').onclick = () => togglePedal('fx1');
+    document.getElementById('fs2').onclick = () => togglePedal('fx2');
+    document.getElementById('fs3').onclick = () => togglePedal('amp');
+
+    // Botões de áudio
+    const txtPattern = document.getElementById('txtAudioPattern');
+    document.getElementById('btnPingPong').onclick = () => {
+      mode = 'pingpong';
+      txtPattern.textContent = 'Modo: Ping-Pong Delay (L ⇄ R)';
+    };
+    document.getElementById('btnReverb').onclick = () => {
+      mode = 'reverb';
+      txtPattern.textContent = 'Modo: Reverb Estéreo Amplo';
+    };
+    document.getElementById('btnStrum').onclick = () => {
+      mode = 'strum';
+      inLevel = 0.95;
+      lLevel = 0.92;
+      rLevel = 0.89;
+      txtPattern.textContent = 'Modo: Palhetada Forte (Peak)';
+    };
+
+    const panSlider = document.getElementById('panSlider');
+    const txtPan = document.getElementById('txtPan');
+    panSlider.oninput = (e) => {
+      mode = 'manual';
+      const v = parseInt(e.target.value);
+      pan = v / 100;
+      txtPan.textContent = v === 50 ? 'Balanço Central (50 / 50)' : `L: ${100 - v}% | R: ${v}%`;
+      txtPattern.textContent = 'Modo: Controle Manual de Pan';
+    };
+
+    // Modal Galeria
+    const modal = document.getElementById('galleryModal');
+    document.getElementById('btnToggleAssetGallery').onclick = () => modal.classList.remove('hidden');
+    document.getElementById('btnCloseGallery').onclick = () => modal.classList.add('hidden');
+
+    // Loop de Animação Real (60fps)
+    let last = performance.now();
+    function loop(now) {
+      const dt = (now - last) / 1000;
+      last = now;
+
+      inLevel = 0.45 + Math.sin(now * 0.006) * 0.12;
+
+      if (mode === 'pingpong') {
+        phase += dt * 3.4;
+        const s = Math.sin(phase);
+        const l = Math.max(0, s);
+        const r = Math.max(0, -s);
+        const amp = 0.55 + Math.sin(now * 0.005) * 0.15;
+        lLevel = Math.min(1, l * amp * 1.6 + 0.1);
+        rLevel = Math.min(1, r * amp * 1.6 + 0.1);
+      } else if (mode === 'reverb') {
+        lLevel = Math.sin(now * 0.005) * 0.22 + 0.58;
+        rLevel = Math.cos(now * 0.006) * 0.20 + 0.56;
+      } else if (mode === 'strum') {
+        inLevel = Math.max(0.2, inLevel - dt * 1.2);
+        lLevel = Math.max(0.1, lLevel - dt * 1.15);
+        rLevel = Math.max(0.1, rLevel - dt * 1.1);
+        if (lLevel < 0.2 && rLevel < 0.2) mode = 'pingpong';
+      } else if (mode === 'manual') {
+        const sig = 0.7 + Math.sin(now * 0.008) * 0.1;
+        lLevel = sig * (1 - pan) * 1.6;
+        rLevel = sig * pan * 1.6;
+      }
+
+      setMeter(meterIn, Math.min(1, Math.max(0, inLevel)), false);
+      setMeter(meterL, Math.min(1, Math.max(0, lLevel)), true);
+      setMeter(meterR, Math.min(1, Math.max(0, rLevel)), true);
+
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+    updateDsp();
+  </script>
+</body>
+</html>
