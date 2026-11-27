@@ -8,7 +8,11 @@
     "guardrail": "node modules/core/guardrail.js",
     "translate": "node modules/translation_ptbr/apply_ptbr.js",
     "tremolo": "node modules/pattern_tremolo/tremolo_inspector.js",
-    "scenes": "node modules/midi_scenes/scenes_controller.js"
+    "scenes": "node modules/midi_scenes/scenes_controller.js",
+    "disasm": "node tools/disasm_thumb.js"
+  },
+  "devDependencies": {
+    "capstone-wasm": "^1.0.3"
   },
   "keywords": [
     "matribox",

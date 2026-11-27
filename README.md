@@ -82,7 +82,8 @@ matribox 2 custom/
 │   └── modified/          # Firmwares compilados e aprovados pelos guardrails
 ├── docs/
 │   ├── ARCHITECTURE.md    # Mapeamento técnico da memória, DSP e partições
-│   └── SAFETY_GUIDE.md    # Prevenção de falhas e guia de recuperação
+│   ├── SAFETY_GUIDE.md    # Prevenção de falhas e guia de recuperação
+│   └── TOOLS.md           # Ferramentas usadas (Capstone/capstone-wasm, Ghidra, Node)
 ├── RELEASES.md            # Histórico de versões e links de download
 ├── package.json           # Scripts de automação npm
 └── README.md              # Documentação principal
