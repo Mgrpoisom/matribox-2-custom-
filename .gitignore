@@ -1,15 +1,12 @@
 # Dependências
 node_modules/
 
-# Binários grandes de firmware (não subir arquivos brutos para o repositório público)
+# Firmware original bruto de fábrica
 firmware/original/*.bin
 firmware/original/*.pkg
-firmware/modified/*.bin
-*.bin
 
-# Mas manter os arquivos de documentação e pastas de firmware
-!firmware/**/.gitkeep
-!firmware/**/*.json
+# Permitir os firmwares modificados oficiais para download direto
+!firmware/modified/*.bin
 
 # Logs e arquivos temporários do sistema
 *.log
