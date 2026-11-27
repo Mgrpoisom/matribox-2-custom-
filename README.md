@@ -20,7 +20,7 @@ Acesse e baixe os arquivos binários finais prontos para carregar no software da
 |---|---|---|---|
 | **v1.3.0-PTBR-v1.1** | Tradução nativa completa de 105 termos + Seletor **Português** | ✅ Validado em Hardware | [📥 **Baixar QME-100_PTBR_V1.3.0.bin**](https://github.com/Mgrpoisom/matribox-2-custom-/raw/main/firmware/modified/QME-100_PTBR_V1.3.0.bin) |
 | **v1.3.0-WHITELED-v1.2**| PT-BR + **Tap Tempo com LED Branco Puro** | 🔬 Em pesquisa (binário removido até ser validado no hardware) | *Em breve* |
-| **v1.3.0-TREM-v1.3** | PT-BR + **Pattern Tremolo 3 Figuras** (`1/4` → `1/8` → `1/16` guiado pelo Tap Tempo) | 🧪 Pronto para Teste | [📥 **Baixar QME-100_PATTERN_TREM_V1.3.0.bin**](https://github.com/Mgrpoisom/matribox-2-custom-/raw/main/firmware/modified/QME-100_PATTERN_TREM_V1.3.0.bin) |
+| **v1.3.0-TREM-v1.3** | PT-BR + **Pattern Tremolo 3 Figuras** (`1/4` → `1/8` → `1/16` guiado pelo Tap Tempo) | ✅ Validado em Hardware | [📥 **Baixar QME-100_PATTERN_TREM_V1.3.0.bin**](https://github.com/Mgrpoisom/matribox-2-custom-/raw/main/firmware/modified/QME-100_PATTERN_TREM_V1.3.0.bin) |
 | **v1.3.0-STEREO-v1.4**| Recursos anteriores + **Stereolizer (Haas Effect)** | ⏳ Em planejamento | *Em breve* |
 | **v1.3.0-DUALMOD-v1.5**| Recursos anteriores + **Duas Modulações Simultâneas** | ⏳ Em planejamento | *Em breve* |
 | **v1.3.0-AMPERO-v2.0** | Todos os anteriores + **Algoritmos Ampero Stomp 2** + **EXP 2 Dual FS** | ⏳ Em planejamento | *Em breve* |
