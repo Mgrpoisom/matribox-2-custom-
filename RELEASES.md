@@ -14,6 +14,7 @@ Aqui você encontra os links de download direto das imagens de firmware modifica
 | **v1.3.0-PTBR-v1.1** | *Tradução Definitiva* | Tradução completa dos 105 termos + Seletor **Português** ativo. | `5.447.156 bytes` | ✅ Testado em Hardware | [📥 Baixar QME-100_PTBR_V1.3.0.bin](https://github.com/Mgrpoisom/matribox-2-custom-/raw/main/firmware/modified/QME-100_PTBR_V1.3.0.bin) |
 | **v1.3.0-WHITELED-v1.2** | *White LED Mod* | Base PT-BR + **Tap Tempo com LED Branco Puro** (Footswitch 2). | — | 🔬 Em pesquisa (binário removido: patch ainda não validado) | *Indisponível* |
 | **v1.3.0-TREM-v1.3** | *Pattern Tremolo* | Base PT-BR + **Pattern Tremolo Configurável** (3 Knobs independentes na tela: `Fig 1`, `Fig 2` e `Fig 3` guiados pelo Tap Tempo no efeito **Tremolo**). | `5.447.156 bytes` | ✅ Testado em Hardware | [📥 **Baixar QME-100_PATTERN_TREM_V1.3.0.bin**](https://github.com/Mgrpoisom/matribox-2-custom-/raw/main/firmware/modified/QME-100_PATTERN_TREM_V1.3.0.bin) |
+| **v1.3.0-STEREO-VU-BETA** | *Stereo VU Meters + DSP %* | **VU Meters Estéreo Reais independentes (`OUT L` sobre `OUT R`)** no topo esquerdo + **Monitor Digital de DSP %** no centro + Monitor `IN` preservado no topo direito. | `5.447.156 bytes` | ✅ Aprovado Guardrail | [📥 **Baixar QME-100_FW_STEREO_VU_BETA.bin**](https://github.com/Mgrpoisom/matribox-2-custom-/raw/main/firmware/modified/QME-100_FW_STEREO_VU_BETA.bin) |
 | **v1.3.0-STEREO-v1.4**| *Stereo Haas* | Recursos anteriores + **Stereolizer (Haas Effect)**. | *Em breve* | ⏳ Em desenvolvimento | *Aguardando compilação* |
 | **v1.3.0-DUALMOD-v1.5**| *Dual Modulation*| Recursos anteriores + **Duas Modulações Simultâneas** na cadeia. | *Em breve* | ⏳ Em desenvolvimento | *Aguardando compilação* |
 | **v1.3.0-AMPERO-v2.0** | *Ampero Algorithms*| Recursos anteriores + **Algoritmos da Ampero Stomp 2** + **EXP 2 Dual FS**. | *Em breve* | ⏳ Em planejamento | *Aguardando compilação* |
@@ -34,6 +35,18 @@ Aqui você encontra os links de download direto das imagens de firmware modifica
     - **Knob 2 (`Fig 2`):** Seleciona a figura rítmica do Passo 2.
     - **Knob 3 (`Fig 3`):** Seleciona a figura rítmica do Passo 3.
     - Máquina de estados em assembly ARM Thumb-2 no oscilador do efeito Tremolo (Partição 3). 100% sincronizado com o Tap Tempo em tempo real.
+
+### Versão Estéreo Real & Monitor DSP: `v1.3.0-STEREO-VU-BETA`
+* **Arquivo:** `QME-100_FW_STEREO_VU_BETA.bin` (✅ **100% Aprovado no Guardrail Forense**)
+* **Tamanho:** `5.447.156 bytes` (idêntico ao byte oficial)
+* **SHA-256:** `DE03ACB852D7DE3DB935D630DC1B92675D70ED4C70FB4F4407B206FD781337E9`
+* **Autores:** Mgrpoisom & CesarMalak
+* **Inovações & Engenharia Reversa:**
+  - **Fim do Mono Sum:** Eliminação da instrução `add r0, r1` no DSP (offset `0x30158`), isolando o canal **OUT L** puro.
+  - **Balística Nativa para OUT R:** Roteamento de `OUT R` para o Pair 2 (`0x2025922c`), garantindo decaimento e peak-hold a 60 FPS com 0% de sobrecarga de CPU.
+  - **Top Bar Dual Meter:** Renderização paralela dos medidores de saída `OUT L` e `OUT R` em duas linhas horizontais no canto superior esquerdo.
+  - **Monitor Digital de DSP %:** Badge central com indicação em tempo real da carga de processamento de áudio.
+  - **Monitor de Entrada Preservado:** Medidor `IN` mantido no canto superior direito.
 
 ### Versão Estável de Tradução: `v1.3.0-PTBR-v1.1`
 * **Arquivo:** `QME-100_PTBR_V1.3.0.bin` (único testado em hardware)

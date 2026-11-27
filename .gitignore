@@ -4,11 +4,13 @@ node_modules/
 # Firmware original bruto de fábrica
 firmware/original/*.bin
 firmware/original/*.pkg
+firmware/extracted/
 
 # Permitir os firmwares modificados oficiais para download direto
 !firmware/modified/*.bin
 
 # Logs e arquivos temporários do sistema
 *.log
+*.bmp
 .DS_Store
 Thumbs.db
