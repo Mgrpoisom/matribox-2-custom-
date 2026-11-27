@@ -10,14 +10,15 @@
 
 ---
 
-## 📦 Downloads & Versões Disponíveis
+## 📦 Downloads Diretos de Firmware (.bin Pronto para Gravar)
 
-Acompanhe as versões e baixe os arquivos binários prontos para gravação na central de lançamentos:
-👉 **[Ver Histórico Completo de Downloads (RELEASES.md)](RELEASES.md)**
+Acesse e baixe os arquivos binários finais prontos para carregar no software da Sonicake:
 
-| Versão | Modificações Incluídas | Status | Link |
+👉 **[Ver Central Completa de Downloads (RELEASES.md)](RELEASES.md)**
+
+| Versão | Modificações Incluídas | Status | Download Direto (.bin) |
 |---|---|---|---|
-| **v1.3.0-PTBR-v1.0** | Tradução nativa completa para **Português do Brasil (PT-BR)** | ✅ Validado | [Download v1.3.0-PTBR-v1.0](https://github.com/Mgrpoisom/matribox-2-custom-/releases/tag/v1.3.0-ptbr-v1.0) |
+| **v1.3.0-PTBR-v1.0** | Tradução nativa completa para **Português do Brasil (PT-BR)** | ✅ Validado | [📥 **Baixar QME-100_PTBR_V1.3.0.bin**](https://github.com/Mgrpoisom/matribox-2-custom-/raw/main/firmware/modified/QME-100_PTBR_V1.3.0.bin) |
 | **v1.3.0-TREM-v1.1** | PT-BR + **Pattern Tremolo** (Speed Ramp & Slicer) | ⏳ Em desenvolvimento | *Em breve* |
 | **v1.3.0-STEREO-v1.2**| PT-BR + Pattern Tremolo + **Stereolizer (Haas)** | ⏳ Em desenvolvimento | *Em breve* |
 | **v1.3.0-DUALMOD-v1.3**| PT-BR + Tremolo + Stereo + **Duas Modulações** | ⏳ Em desenvolvimento | *Em breve* |
