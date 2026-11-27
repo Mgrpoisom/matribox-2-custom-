@@ -13,7 +13,7 @@ Aqui você encontra os links de download direto das imagens de firmware modifica
 |---|---|---|---|---|---|
 | **v1.3.0-PTBR-v1.1** | *Tradução Definitiva* | Tradução completa dos 105 termos + Seletor **Português** ativo. | `5.447.156 bytes` | ✅ Testado em Hardware | [📥 Baixar QME-100_PTBR_V1.3.0.bin](https://github.com/Mgrpoisom/matribox-2-custom-/raw/main/firmware/modified/QME-100_PTBR_V1.3.0.bin) |
 | **v1.3.0-WHITELED-v1.2** | *White LED Mod* | Base PT-BR + **Tap Tempo com LED Branco Puro** (Footswitch 2). | — | 🔬 Em pesquisa (binário removido: patch ainda não validado) | *Indisponível* |
-| **v1.3.0-TREM-v1.3** | *Pattern Tremolo Pêndulo* | Base PT-BR + **Pattern Tremolo Pêndulo** (`1/4` → `1/8` → `1/16` → `1/8` → `1/4` contínuo guiado pelo Tap Tempo no efeito **Tremolo**). | `5.447.156 bytes` | 🧪 Pronto para Teste | [📥 **Baixar QME-100_PATTERN_TREM_V1.3.0.bin**](https://github.com/Mgrpoisom/matribox-2-custom-/raw/main/firmware/modified/QME-100_PATTERN_TREM_V1.3.0.bin) |
+| **v1.3.0-TREM-v1.3** | *Pattern Tremolo* | Base PT-BR + **Pattern Tremolo Configurável** (3 Knobs independentes na tela: `Fig 1`, `Fig 2` e `Fig 3` guiados pelo Tap Tempo no efeito **Tremolo**). | `5.447.156 bytes` | ✅ Testado em Hardware | [📥 **Baixar QME-100_PATTERN_TREM_V1.3.0.bin**](https://github.com/Mgrpoisom/matribox-2-custom-/raw/main/firmware/modified/QME-100_PATTERN_TREM_V1.3.0.bin) |
 | **v1.3.0-STEREO-v1.4**| *Stereo Haas* | Recursos anteriores + **Stereolizer (Haas Effect)**. | *Em breve* | ⏳ Em desenvolvimento | *Aguardando compilação* |
 | **v1.3.0-DUALMOD-v1.5**| *Dual Modulation*| Recursos anteriores + **Duas Modulações Simultâneas** na cadeia. | *Em breve* | ⏳ Em desenvolvimento | *Aguardando compilação* |
 | **v1.3.0-AMPERO-v2.0** | *Ampero Algorithms*| Recursos anteriores + **Algoritmos da Ampero Stomp 2** + **EXP 2 Dual FS**. | *Em breve* | ⏳ Em planejamento | *Aguardando compilação* |
@@ -22,18 +22,18 @@ Aqui você encontra os links de download direto das imagens de firmware modifica
 
 ## 🔍 Detalhes Técnicos dos Arquivos Disponíveis
 
-### Versão com Modulação Pêndulo: `v1.3.0-TREM-v1.3`
-* **Arquivo:** `QME-100_PATTERN_TREM_V1.3.0.bin`
+### Versão Estável com Modulação: `v1.3.0-TREM-v1.3`
+* **Arquivo:** `QME-100_PATTERN_TREM_V1.3.0.bin` (✅ **Testado e aprovado em hardware**)
 * **Tamanho:** `5.447.156 bytes`
-* **SHA-256:** `F5C216A94B6202BB8E1EED6D6A2DBE3C50DBCCD30C205D231E135224B273431E`
+* **SHA-256:** `C90B8266F0C46CD275B971D767B5F11D4FABA6D1F0B32935CC026398A9A4EF16`
 * **Autores:** Mgrpoisom & CesarMalak
 * **Recursos:**
   - Tradução nativa completa PT-BR (105 termos).
-  - **Pattern Tremolo Pêndulo (1 ➔ 2 ➔ 3 ➔ 2 ➔ 1)**:
-    - Alterna continuamente em onda triangular a cada 4 tempos:
-      - `1/4` (Semínima) ➔ `1/8` (Colcheia) ➔ `1/16` (Semicolcheia) ➔ `1/8` (Colcheia) ➔ `1/4` (Semínima)...
-    - Mantém a interface e o descritor de fábrica 100% seguros (sem riscos de conflito com presets).
-    - Máquina de estados em assembly ARM Thumb-2 no oscilador do efeito Tremolo (Partição 3). Sincronizado 100% com o Tap Tempo em tempo real.
+  - **Pattern Tremolo Configurável (3 Passos nos Knobs)**:
+    - **Knob 1 (`Fig 1`):** Seleciona a figura rítmica do Passo 1 (`1/1`, `1/2`, `1/4`, `1/8`, `1/16`...).
+    - **Knob 2 (`Fig 2`):** Seleciona a figura rítmica do Passo 2.
+    - **Knob 3 (`Fig 3`):** Seleciona a figura rítmica do Passo 3.
+    - Máquina de estados em assembly ARM Thumb-2 no oscilador do efeito Tremolo (Partição 3). 100% sincronizado com o Tap Tempo em tempo real.
 
 ### Versão Estável de Tradução: `v1.3.0-PTBR-v1.1`
 * **Arquivo:** `QME-100_PTBR_V1.3.0.bin` (único testado em hardware)
