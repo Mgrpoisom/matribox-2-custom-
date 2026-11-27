@@ -3,310 +3,525 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sonicake Matribox II - Simulador Oficial de Firmware</title>
+  <title>Sonicake Matribox II - Simulador Oficial Fiel ao Manual</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="assets_data.js"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Teko:wght@600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Share+Tech+Mono&display=swap');
     
     body {
-      background: radial-gradient(circle at 50% 20%, #1e222b 0%, #0d0f14 100%);
+      background: #0b0d11;
       font-family: 'Share Tech Mono', monospace;
     }
-    .teko-font {
-      font-family: 'Teko', sans-serif;
+    .chakra {
+      font-family: 'Chakra Petch', sans-serif;
     }
-    .led-dot-single {
-      width: 9px;
-      height: 3px;
-      border-radius: 1px;
-      margin-bottom: 2px;
-      transition: all 0.04s ease-out;
+    .lcd-display {
+      background: #000000;
+      border: 4px solid #1f242c;
+      box-shadow: inset 0 0 25px rgba(0,0,0,0.95), 0 2px 10px rgba(0,0,0,0.8);
+      width: 480px;
+      height: 272px;
     }
-    .led-dot-dual {
+    .vu-dot {
       width: 4px;
-      height: 3px;
+      height: 4px;
       border-radius: 1px;
-      margin-bottom: 2px;
-      transition: all 0.04s ease-out;
+      margin-right: 2px;
+      display: inline-block;
+      transition: all 0.04s ease;
     }
-    .led-off {
-      background-color: #141a14;
+    .vu-off {
+      background: #141c14;
       opacity: 0.25;
     }
-    .led-green {
-      background-color: #22c55e;
+    .vu-green {
+      background: #22c55e;
       box-shadow: 0 0 4px #22c55e;
     }
-    .led-yellow {
-      background-color: #eab308;
-      box-shadow: 0 0 5px #eab308;
+    .vu-yellow {
+      background: #eab308;
+      box-shadow: 0 0 4px #eab308;
     }
-    .led-red {
-      background-color: #ef4444;
-      box-shadow: 0 0 6px #ef4444;
+    .vu-red {
+      background: #ef4444;
+      box-shadow: 0 0 5px #ef4444;
     }
-    .lcd-screen {
-      background: #0f131a;
-      border: 3px solid #232a35;
-      box-shadow: inset 0 0 30px rgba(0,0,0,0.9), 0 4px 20px rgba(0,0,0,0.6);
-    }
-    .footswitch {
-      width: 64px;
-      height: 64px;
+    .rotary-knob {
+      width: 46px;
+      height: 46px;
       border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #94a3b8 0%, #475569 50%, #1e293b 100%);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.7), inset 0 2px 4px rgba(255,255,255,0.4);
+      background: radial-gradient(circle at 35% 35%, #475569 0%, #1e293b 70%, #0f172a 100%);
+      border: 2px solid #64748b;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.8), inset 0 1px 2px rgba(255,255,255,0.4);
       cursor: pointer;
-      transition: transform 0.08s ease, filter 0.08s ease;
     }
-    .footswitch:active {
-      transform: scale(0.94);
-      filter: brightness(0.85);
-    }
-    .halo-led {
-      box-shadow: 0 0 16px currentColor;
-    }
-    .knob {
-      width: 44px;
-      height: 44px;
+    .rotary-knob-sm {
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #475569 0%, #1e293b 80%, #0f172a 100%);
-      border: 2px solid #334155;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.8);
+      background: radial-gradient(circle at 35% 35%, #475569 0%, #1e293b 70%, #0f172a 100%);
+      border: 2px solid #475569;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.8);
+      cursor: pointer;
     }
-    .knob-marker {
-      width: 2px;
+    .round-btn {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #334155;
+      border: 1px solid #64748b;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.6);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.1s;
+    }
+    .round-btn:active {
+      transform: scale(0.92);
+      background: #1e293b;
+    }
+    .module-capsule {
+      width: 36px;
       height: 12px;
-      background: #e2e8f0;
-      border-radius: 1px;
+      border-radius: 6px;
+      background: #1e293b;
+      border: 1px solid #475569;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .module-capsule.active {
+      background: #38bdf8;
+      border-color: #7dd3fc;
+      box-shadow: 0 0 8px #38bdf8;
+    }
+    .footswitch-hw {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #cbd5e1 0%, #64748b 50%, #1e293b 100%);
+      border: 2px solid #94a3b8;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.9), inset 0 2px 3px rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: transform 0.08s ease;
+    }
+    .footswitch-hw:active {
+      transform: scale(0.93);
+    }
+    .halo-led-ring {
+      padding: 6px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.6);
+      border: 2px solid currentColor;
+      box-shadow: 0 0 15px currentColor;
+    }
+    .exp-pedal {
+      width: 140px;
+      height: 480px;
+      background: #14171d;
+      border: 3px solid #334155;
+      border-radius: 12px;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.9), 0 8px 20px rgba(0,0,0,0.7);
+      background-image: repeating-linear-gradient(45deg, #181d26 0, #181d26 5px, #101318 5px, #101318 10px);
     }
   </style>
 </head>
-<body class="text-neutral-200 min-h-screen flex flex-col items-center justify-start p-4 select-none">
+<body class="text-neutral-200 flex flex-col items-center justify-start p-4 min-h-screen">
 
-  <!-- TOP BAR COM STATUS -->
-  <div class="w-full max-w-4xl flex items-center justify-between py-2 border-b border-neutral-800 text-xs mb-4">
-    <div class="flex items-center gap-2">
-      <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-      <span class="font-bold text-neutral-100 tracking-wider">MATRIBOX II • SIMULADOR DE FIRMWARE V1.3</span>
-      <span class="px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-400 border border-emerald-500/40 text-[10px]">168 Assets Reais Carregados</span>
-    </div>
+  <!-- CABEÇALHO DA FERRAMENTA -->
+  <div class="w-full max-w-5xl flex items-center justify-between pb-3 border-b border-neutral-800 text-xs mb-3">
     <div class="flex items-center gap-3">
-      <button id="btnToggleAssetGallery" class="px-3 py-1 rounded bg-neutral-800 hover:bg-neutral-700 text-neutral-300 text-xs border border-neutral-700 transition">
-        📂 Ver 168 Bitmaps Reais
+      <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+      <span class="font-bold text-neutral-100 tracking-wider">MATRIBOX II • PAINEL 100% FIEL AO MANUAL OFICIAL</span>
+      <span class="px-2 py-0.5 rounded bg-amber-950/70 border border-amber-500/50 text-amber-300 font-mono text-[11px]">Firmware V1.3.0</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <button id="btnSwitchDisplayMode" class="px-3 py-1 rounded bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-xs font-bold border border-neutral-700 transition">
+        Alternar Tela: Preset Mode ⇄ Stomp Mode
       </button>
-      <span class="text-neutral-400 text-xs font-mono">Resolução: 480x272</span>
     </div>
   </div>
 
-  <!-- CHASSIS DA PEDALEIRA (GABINETE REALÍSTICO) -->
-  <div class="relative w-full max-w-3xl bg-neutral-900 rounded-3xl border-4 border-neutral-700 p-6 shadow-2xl space-y-6">
+  <!-- GABINETE COMPLETO DO PEDAL (RÉPLICA DO MANUAL PÁGINA 5) -->
+  <div class="relative bg-neutral-900 border-4 border-neutral-700 rounded-3xl p-6 shadow-2xl flex gap-6 items-start">
     
-    <!-- HEADER DA CARCAÇA -->
-    <div class="flex justify-between items-center px-2">
-      <div class="flex items-center gap-3">
-        <span class="teko-font text-3xl tracking-widest text-neutral-300 font-bold leading-none">SONICAKE</span>
-        <span class="text-xs tracking-widest uppercase text-amber-500 font-bold bg-amber-950/60 border border-amber-500/40 px-2 py-0.5 rounded">
-          MATRIBOX II
-        </span>
-      </div>
-      <div class="flex items-center gap-4">
-        <!-- Knob Master -->
-        <div class="flex flex-col items-center">
-          <div class="knob flex items-start justify-center pt-1.5 transform rotate-[-35deg]">
-            <div class="knob-marker"></div>
-          </div>
-          <span class="text-[9px] font-bold text-neutral-400 mt-1 uppercase">Master</span>
-        </div>
-        <!-- Knob Para -->
-        <div class="flex flex-col items-center">
-          <div class="knob flex items-start justify-center pt-1.5 transform rotate-[20deg]">
-            <div class="knob-marker"></div>
-          </div>
-          <span class="text-[9px] font-bold text-neutral-400 mt-1 uppercase">Para</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- TELA LCD NATIVA (480x272) -->
-    <div class="lcd-screen relative rounded-xl p-4 text-neutral-100 overflow-hidden">
+    <!-- ÁREA PRINCIPAL DA PEDALEIRA (SEM O EXP PEDAL) -->
+    <div class="flex flex-col items-center w-[580px]">
       
-      <!-- Linha de Cabeçalho do LCD -->
-      <div class="flex items-center justify-between border-b border-neutral-800 pb-2 mb-3 pr-10">
-        <div class="flex items-center gap-3">
-          <span id="lcdPresetNumber" class="text-3xl font-black tracking-tight text-amber-400 drop-shadow">01 A</span>
-          <div class="border border-amber-500 bg-amber-500/15 px-2.5 py-0.5 rounded text-xs font-bold text-amber-300">
-            Modo Stomp
-          </div>
-        </div>
-
-        <!-- Badges de Volume, BPM e o NOVO MEDIDOR DE DSP % -->
-        <div class="flex items-center gap-4 text-xs font-semibold">
-          <!-- MEDIDOR DE CONSUMO DE DSP % -->
-          <div id="badgeDsp" class="flex items-center gap-1.5 px-2.5 py-0.5 rounded border border-emerald-500/70 bg-emerald-950/60 text-emerald-300 font-mono text-xs font-bold shadow-sm">
-            <span class="text-[9px] text-emerald-400 uppercase">DSP</span>
-            <span id="txtDspVal">54%</span>
-          </div>
-
-          <!-- Volume Geral -->
-          <div class="flex items-center gap-1.5 text-neutral-300">
-            <svg class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M17.95 6.05a8 8 0 010 11.9M6.5 9H4a1 1 0 00-1 1v4a1 1 0 001 1h2.5l4 4V5l-4 4z"/></svg>
-            <span id="lcdVolume">50</span>
-          </div>
-
-          <!-- BPM -->
-          <div class="flex items-center gap-1.5 text-neutral-300">
-            <svg class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            <span id="lcdBpm">68</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- CADEIA DE BLOCOS DE EFEITO (CLICÁVEIS COM ÍCONES REAIS DO FIRMWARE) -->
-      <div class="grid grid-cols-4 gap-3 mb-3 pr-11">
-        <!-- FX 1 -->
-        <div id="pedalFx1" class="fx-card bg-cyan-700/80 rounded-lg p-2 flex flex-col justify-between h-20 shadow cursor-pointer border-2 border-cyan-400/50 hover:brightness-110 transition">
-          <div class="flex justify-between items-center">
-            <span class="text-[10px] font-bold uppercase text-cyan-200">FX 1</span>
-            <span class="text-[9px] bg-cyan-950/80 text-cyan-300 px-1 rounded font-mono">+8%</span>
-          </div>
-          <div class="flex justify-center items-center h-9">
-            <img id="iconFx1" class="h-9 w-9 object-contain" alt="FX1">
-          </div>
-          <span class="text-[10px] text-center font-bold text-cyan-100 truncate">Compressor</span>
-        </div>
-
-        <!-- RVB -->
-        <div id="pedalRvb" class="fx-card bg-neutral-700/90 rounded-lg p-2 flex flex-col justify-between h-20 shadow cursor-pointer border-2 border-neutral-400/50 hover:brightness-110 transition">
-          <div class="flex justify-between items-center">
-            <span class="text-[10px] font-bold uppercase text-neutral-200">RVB</span>
-            <span class="text-[9px] bg-neutral-900/80 text-neutral-300 px-1 rounded font-mono">+20%</span>
-          </div>
-          <div class="flex justify-center items-center h-9">
-            <img id="iconRvb" class="h-9 w-9 object-contain" alt="RVB">
-          </div>
-          <span class="text-[10px] text-center font-bold text-neutral-100 truncate">Shimmer</span>
-        </div>
-
-        <!-- FX 2 -->
-        <div id="pedalFx2" class="fx-card bg-rose-700/80 rounded-lg p-2 flex flex-col justify-between h-20 shadow cursor-pointer border-2 border-rose-400/50 hover:brightness-110 transition">
-          <div class="flex justify-between items-center">
-            <span class="text-[10px] font-bold uppercase text-rose-200">FX 2</span>
-            <span class="text-[9px] bg-rose-950/80 text-rose-300 px-1 rounded font-mono">+12%</span>
-          </div>
-          <div class="flex justify-center items-center h-9">
-            <img id="iconFx2" class="h-9 w-9 object-contain" alt="FX2">
-          </div>
-          <span class="text-[10px] text-center font-bold text-rose-100 truncate">Plexi OD</span>
-        </div>
-
-        <!-- AMP -->
-        <div id="pedalAmp" class="fx-card bg-amber-100 text-neutral-900 rounded-lg p-2 flex flex-col justify-between h-20 shadow cursor-pointer border-2 border-amber-400 hover:brightness-110 transition">
-          <div class="flex justify-between items-center">
-            <span class="text-[10px] font-black uppercase text-neutral-800">AMP</span>
-            <span class="text-[9px] bg-amber-300/80 text-neutral-950 font-bold px-1 rounded font-mono">+24%</span>
-          </div>
-          <div class="flex justify-center items-center h-9">
-            <img id="iconAmp" class="h-9 w-9 object-contain" alt="AMP">
-          </div>
-          <span class="text-[10px] text-center font-black text-neutral-900 truncate">UK 800</span>
-        </div>
-      </div>
-
-      <!-- Barra de Instruções no LCD -->
-      <div class="bg-neutral-800/90 border border-neutral-700 rounded px-3 py-1.5 text-xs flex justify-between items-center pr-11">
-        <span class="text-neutral-400 font-mono">Preset: <b class="text-amber-400 font-bold">Rock Lead PT-BR</b></span>
-        <span class="text-emerald-400 font-mono text-[11px]">Saída Estéreo (Dual L || R) Ativa</span>
-      </div>
-
-      <!-- PAINEL VERTICAL DE VU METERS (Borda Direita do Display) -->
-      <div class="absolute right-2 top-3 bottom-3 flex flex-col justify-between items-center w-8 bg-black/80 rounded px-1 py-1.5 border border-neutral-800 shadow-inner">
+      <!-- Linha Superior do Gabinete: Marca + Knobs Master/Para + Botões Globais -->
+      <div class="w-full flex justify-between items-center mb-3 px-2">
         
-        <!-- SEÇÃO 1: ENTRADA (INPUT) NATIVA PRESERVADA NO TOPO -->
+        <!-- Esquerda: MASTER KNOB + GLOBAL + DRUM -->
+        <div class="flex items-center gap-3">
+          <div class="flex flex-col items-center">
+            <div class="rotary-knob flex items-start justify-center pt-1 transform rotate-[-30deg]">
+              <div class="w-0.5 h-3 bg-white rounded"></div>
+            </div>
+            <span class="text-[9px] font-bold text-neutral-400 mt-1 uppercase">Master</span>
+          </div>
+          <div class="flex flex-col gap-1.5 items-center">
+            <div class="flex flex-col items-center">
+              <button id="btnGlobal" class="round-btn"></button>
+              <span class="text-[7px] text-neutral-400 uppercase mt-0.5 font-bold">Global</span>
+            </div>
+            <div class="flex flex-col items-center">
+              <button id="btnDrum" class="round-btn"></button>
+              <span class="text-[7px] text-neutral-400 uppercase mt-0.5 font-bold">Drum</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Centro Topo: LOGO SONICAKE MATRIBOX II -->
         <div class="flex flex-col items-center">
-          <span class="text-[8px] font-black text-cyan-400 mb-0.5 tracking-tighter">IN</span>
-          <div id="meterIn" class="flex flex-col-reverse">
-            <!-- 14 bolinhas de Entrada -->
+          <span class="chakra font-extrabold text-2xl tracking-widest text-neutral-300 leading-none">SONICAKE</span>
+          <span class="text-[8px] font-bold tracking-widest uppercase text-amber-500">MATRIBOX II • MULTI-EFFECTS</span>
+        </div>
+
+        <!-- Direita: PARA KNOB + EXIT + SAVE -->
+        <div class="flex items-center gap-3">
+          <div class="flex flex-col gap-1.5 items-center">
+            <div class="flex flex-col items-center">
+              <button id="btnExit" class="round-btn"></button>
+              <span class="text-[7px] text-neutral-400 uppercase mt-0.5 font-bold">Exit</span>
+            </div>
+            <div class="flex flex-col items-center">
+              <button id="btnSave" class="round-btn"></button>
+              <span class="text-[7px] text-neutral-400 uppercase mt-0.5 font-bold">Save</span>
+            </div>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="rotary-knob flex items-start justify-center pt-1 transform rotate-[25deg]">
+              <div class="w-0.5 h-3 bg-white rounded"></div>
+            </div>
+            <span class="text-[9px] font-bold text-neutral-400 mt-1 uppercase">Para</span>
           </div>
         </div>
 
-        <!-- SEPARADOR NÍTIDO -->
-        <div class="w-full h-px bg-neutral-700 my-0.5"></div>
+      </div>
 
-        <!-- SEÇÃO 2: SAÍDA COM DUAS LINHAS PARALELAS LADO A LADO (L || R) -->
-        <div class="flex flex-col items-center w-full">
-          <div class="flex justify-between w-full px-0.5 mb-0.5">
-            <span class="text-[7px] font-black text-emerald-400">L</span>
-            <span class="text-[7px] font-black text-emerald-400">R</span>
-          </div>
-          <div class="flex justify-between w-full px-0.5">
-            <div id="meterL" class="flex flex-col-reverse">
-              <!-- Coluna L -->
+      <!-- TELA LCD 480x272 REAL (RÉPLICA EXATA DO MANUAL PÁGINA 7 E 8) -->
+      <div class="lcd-display relative p-2.5 overflow-hidden flex flex-col justify-between rounded-lg">
+        
+        <!-- BORDA SUPERIOR: AS DUAS BARRAS DE VU METERS (A e B do manual!) -->
+        <div class="w-full flex justify-between items-center px-1 border-b border-neutral-900 pb-1">
+          
+          <!-- B: OUTPUT LEVEL MONITOR (NOVO: L e R em DUAS LINHAS PARALELAS!) -->
+          <div class="flex flex-col">
+            <div class="flex items-center gap-1.5">
+              <span class="text-[8px] font-mono text-emerald-400 font-bold">OUT L</span>
+              <div id="vuOutL" class="flex items-center">
+                <!-- 16 dots horizontais do canal L -->
+              </div>
             </div>
-            <div id="meterR" class="flex flex-col-reverse">
-              <!-- Coluna R -->
+            <div class="flex items-center gap-1.5 mt-0.5">
+              <span class="text-[8px] font-mono text-emerald-400 font-bold">OUT R</span>
+              <div id="vuOutR" class="flex items-center">
+                <!-- 16 dots horizontais do canal R -->
+              </div>
             </div>
           </div>
-          <span class="text-[7px] font-bold text-neutral-400 mt-0.5 uppercase tracking-tighter">OUT</span>
+
+          <!-- CENTRO TOPO: NOVO MEDIDOR DIGITAL DE DSP % -->
+          <div id="dspChip" class="px-2 py-0.5 rounded border border-emerald-500/70 bg-emerald-950/80 text-emerald-300 font-mono text-[10px] font-bold shadow flex items-center gap-1">
+            <span class="text-[8px] text-emerald-400">DSP</span>
+            <span id="dspValue">48%</span>
+          </div>
+
+          <!-- A: INPUT LEVEL MONITOR (ENTRADA MONO ORIGINAL INTACTA!) -->
+          <div class="flex items-center gap-1.5">
+            <div id="vuIn" class="flex items-center">
+              <!-- 18 dots horizontais de Entrada -->
+            </div>
+            <span class="text-[8px] font-mono text-cyan-400 font-bold">IN</span>
+          </div>
+
         </div>
 
+        <!-- CONTEÚDO PRINCIPAL DA TELA (PRESET MODE OU STOMP MODE) -->
+        <div id="lcdContentArea" class="flex-1 flex flex-col justify-between py-1 px-1">
+          
+          <!-- LINHA 1: NÚMERO DO PRESET + ÍCONES DE STATUS -->
+          <div class="flex justify-between items-center">
+            <div class="flex items-baseline gap-2">
+              <span id="txtPresetNum" class="chakra font-extrabold text-3xl text-neutral-100 drop-shadow">01 A</span>
+              <span id="badgeFsMode" class="text-[10px] px-2 py-0.5 rounded border border-amber-500/80 bg-amber-500/10 text-amber-300 font-bold">
+                Modo Stomp
+              </span>
+            </div>
+            <!-- Ícones da tela original: EXP, Drum, Volume, BPM -->
+            <div class="flex items-center gap-3 text-xs font-mono text-neutral-300">
+              <div class="flex items-center gap-1">
+                <span class="text-[10px] border border-neutral-600 px-1 rounded text-neutral-400 font-bold">EXP</span>
+                <span class="text-[10px] text-neutral-400">A</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <svg class="w-3.5 h-3.5 text-neutral-400" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+                <span class="text-[10px] text-neutral-400">DRUM</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <svg class="w-3.5 h-3.5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M6.5 9H4a1 1 0 00-1 1v4a1 1 0 001 1h2.5l4 4V5l-4 4z"/></svg>
+                <span class="font-bold">50</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <svg class="w-3.5 h-3.5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span class="font-bold">120</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- LINHA 2: NOME GRANDE DO PRESET -->
+          <div class="flex items-center justify-between">
+            <span class="chakra font-bold text-2xl text-neutral-200 tracking-wide">Matribox II*</span>
+            <span class="text-[10px] text-neutral-500 font-mono">PT-BR Custom V1.3</span>
+          </div>
+
+          <!-- VISÃO A: CADEIA DE EFEITOS EM 2 FILEIRAS DE 5 BLOCOS (Manual Página 7!) -->
+          <div id="viewPresetMode" class="flex flex-col gap-1 my-0.5">
+            <!-- Fileira 1: NR, FX1, FX2, AMP, CAB -->
+            <div class="grid grid-cols-5 gap-1.5">
+              <div class="bg-neutral-800/80 border border-neutral-700 rounded px-1 py-1 flex flex-col items-center">
+                <span class="text-[8px] font-bold text-neutral-400">NR</span>
+                <span class="text-[9px] text-neutral-300 font-semibold truncate">Gate 1</span>
+              </div>
+              <div class="bg-cyan-950/80 border border-cyan-500 rounded px-1 py-1 flex flex-col items-center shadow-sm">
+                <span class="text-[8px] font-bold text-cyan-300">FX 1</span>
+                <span class="text-[9px] text-cyan-200 font-semibold truncate">Comp 1</span>
+              </div>
+              <div class="bg-rose-950/80 border border-rose-500 rounded px-1 py-1 flex flex-col items-center shadow-sm">
+                <span class="text-[8px] font-bold text-rose-300">FX 2</span>
+                <span class="text-[9px] text-rose-200 font-semibold truncate">Plexi OD</span>
+              </div>
+              <div class="bg-amber-950/80 border border-amber-500 rounded px-1 py-1 flex flex-col items-center shadow-sm">
+                <span class="text-[8px] font-bold text-amber-300">AMP</span>
+                <span class="text-[9px] text-amber-200 font-semibold truncate">UK 800</span>
+              </div>
+              <div class="bg-emerald-950/80 border border-emerald-500 rounded px-1 py-1 flex flex-col items-center shadow-sm">
+                <span class="text-[8px] font-bold text-emerald-300">CAB</span>
+                <span class="text-[9px] text-emerald-200 font-semibold truncate">Brit 4x12</span>
+              </div>
+            </div>
+
+            <!-- Fileira 2: EQ, MOD, DLY, RVB, VOL -->
+            <div class="grid grid-cols-5 gap-1.5">
+              <div class="bg-green-950/80 border border-green-500 rounded px-1 py-1 flex flex-col items-center shadow-sm">
+                <span class="text-[8px] font-bold text-green-300">EQ</span>
+                <span class="text-[9px] text-green-200 font-semibold truncate">Guitar EQ</span>
+              </div>
+              <div class="bg-teal-950/80 border border-teal-500 rounded px-1 py-1 flex flex-col items-center shadow-sm">
+                <span class="text-[8px] font-bold text-teal-300">MOD</span>
+                <span class="text-[9px] text-teal-200 font-semibold truncate">Vibrato</span>
+              </div>
+              <div class="bg-indigo-950/80 border border-indigo-500 rounded px-1 py-1 flex flex-col items-center shadow-sm">
+                <span class="text-[8px] font-bold text-indigo-300">DLY</span>
+                <span class="text-[9px] text-indigo-200 font-semibold truncate">Ping Pong</span>
+              </div>
+              <div class="bg-purple-950/80 border border-purple-500 rounded px-1 py-1 flex flex-col items-center shadow-sm">
+                <span class="text-[8px] font-bold text-purple-300">RVB</span>
+                <span class="text-[9px] text-purple-200 font-semibold truncate">Shimmer</span>
+              </div>
+              <div class="bg-neutral-800/80 border border-neutral-700 rounded px-1 py-1 flex flex-col items-center">
+                <span class="text-[8px] font-bold text-neutral-400">VOL</span>
+                <span class="text-[9px] text-neutral-300 font-semibold truncate">Master</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- VISÃO B: STOMP MODE COM OS 3 CTRL GIGANTES (Manual Página 8!) -->
+          <div id="viewStompMode" class="hidden flex-col gap-2 my-1">
+            <div class="grid grid-cols-3 gap-3">
+              <div class="bg-neutral-800/90 border border-neutral-600 rounded-lg p-2 flex items-center justify-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]"></span>
+                <span class="font-bold text-xs text-neutral-100">CTRL 1 (FX1)</span>
+              </div>
+              <div class="bg-neutral-800/90 border border-neutral-600 rounded-lg p-2 flex items-center justify-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-[0_0_8px_#f43f5e]"></span>
+                <span class="font-bold text-xs text-neutral-100">CTRL 2 (FX2)</span>
+              </div>
+              <div class="bg-neutral-800/90 border border-neutral-600 rounded-lg p-2 flex items-center justify-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24]"></span>
+                <span class="font-bold text-xs text-neutral-100">CTRL 3 (AMP)</span>
+              </div>
+            </div>
+            <div class="flex justify-between items-center text-[10px] text-neutral-400 font-mono px-2">
+              <span>A+B: <b>TUNER</b></span>
+              <span>B+C: <b>LOOPER</b></span>
+              <span>Segurar A: <b>TAP TEMPO</b></span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- LINHA INFERIOR DO LCD: PARAMETER BAR (3 SLIDERS CONTROLADOS PELOS 3 KNOBS!) -->
+        <div class="w-full grid grid-cols-3 gap-3 pt-1 border-t border-neutral-800 text-xs">
+          <!-- Knob 1 Slider: Tone (30) -->
+          <div class="flex flex-col">
+            <div class="flex justify-between text-[10px] text-neutral-400 mb-0.5">
+              <span>Tone</span>
+              <span id="valKnob1" class="font-bold text-neutral-200">30</span>
+            </div>
+            <div class="w-full bg-neutral-800 h-1 rounded overflow-hidden">
+              <div id="barKnob1" class="bg-rose-500 h-full w-[30%]"></div>
+            </div>
+          </div>
+
+          <!-- Knob 2 Slider: Gain (15) -->
+          <div class="flex flex-col">
+            <div class="flex justify-between text-[10px] text-neutral-400 mb-0.5">
+              <span>Gain</span>
+              <span id="valKnob2" class="font-bold text-neutral-200">15</span>
+            </div>
+            <div class="w-full bg-neutral-800 h-1 rounded overflow-hidden">
+              <div id="barKnob2" class="bg-amber-500 h-full w-[15%]"></div>
+            </div>
+          </div>
+
+          <!-- Knob 3 Slider: Preset VOL (50) -->
+          <div class="flex flex-col">
+            <div class="flex justify-between text-[10px] text-neutral-400 mb-0.5">
+              <span>Preset VOL</span>
+              <span id="valKnob3" class="font-bold text-neutral-200">50</span>
+            </div>
+            <div class="w-full bg-neutral-800 h-1 rounded overflow-hidden">
+              <div id="barKnob3" class="bg-emerald-500 h-full w-[50%]"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 3 KNOBS DE AJUSTE RÁPIDO DO PARÂMETRO ABAIXO DO DISPLAY (Página 5, item 8!) -->
+      <div class="w-full grid grid-cols-3 gap-3 mt-3 px-12">
+        <div class="flex flex-col items-center">
+          <div id="quickKnob1" class="rotary-knob-sm flex items-start justify-center pt-1 transform rotate-[-45deg]">
+            <div class="w-0.5 h-2.5 bg-neutral-200 rounded"></div>
+          </div>
+          <span class="text-[8px] font-bold text-neutral-400 mt-1 uppercase">1 (Tone)</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <div id="quickKnob2" class="rotary-knob-sm flex items-start justify-center pt-1 transform rotate-[-60deg]">
+            <div class="w-0.5 h-2.5 bg-neutral-200 rounded"></div>
+          </div>
+          <span class="text-[8px] font-bold text-neutral-400 mt-1 uppercase">2 (Gain)</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <div id="quickKnob3" class="rotary-knob-sm flex items-start justify-center pt-1 transform rotate-[0deg]">
+            <div class="w-0.5 h-2.5 bg-neutral-200 rounded"></div>
+          </div>
+          <span class="text-[8px] font-bold text-neutral-400 mt-1 uppercase">3 (VOL)</span>
+        </div>
+      </div>
+
+      <!-- 9 BOTÕES DE MÓDULO COM LED (Página 5, item 9: FX1, FX2, AMP, NR, CAB, EQ, MOD, DLY, RVB!) -->
+      <div class="w-full flex justify-between items-center px-4 mt-4 py-2 border-t border-neutral-800">
+        <div class="flex flex-col items-center">
+          <div class="module-capsule active" data-mod="fx1"></div>
+          <span class="text-[7px] font-bold text-neutral-400 mt-1">FX 1</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="module-capsule active" data-mod="fx2"></div>
+          <span class="text-[7px] font-bold text-neutral-400 mt-1">FX 2</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="module-capsule active" data-mod="amp"></div>
+          <span class="text-[7px] font-bold text-neutral-400 mt-1">AMP</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="module-capsule active" data-mod="nr"></div>
+          <span class="text-[7px] font-bold text-neutral-400 mt-1">NR</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="module-capsule active" data-mod="cab"></div>
+          <span class="text-[7px] font-bold text-neutral-400 mt-1">CAB</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="module-capsule active" data-mod="eq"></div>
+          <span class="text-[7px] font-bold text-neutral-400 mt-1">EQ</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="module-capsule active" data-mod="mod"></div>
+          <span class="text-[7px] font-bold text-neutral-400 mt-1">MOD</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="module-capsule active" data-mod="dly"></div>
+          <span class="text-[7px] font-bold text-neutral-400 mt-1">DLY</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="module-capsule active" data-mod="rvb"></div>
+          <span class="text-[7px] font-bold text-neutral-400 mt-1">RVB</span>
+        </div>
+      </div>
+
+      <!-- 3 FOOTSWITCHES COM ANEL LED HALO (Página 5, item 10: ◄, ►, CTRL!) -->
+      <div class="w-full grid grid-cols-3 gap-6 pt-5 px-10 border-t border-neutral-800">
+        <!-- Footswitch 1: ◄ -->
+        <div class="flex flex-col items-center gap-2">
+          <div id="haloFs1" class="halo-led-ring text-cyan-400 transition-all">
+            <button id="fs1" class="footswitch-hw flex items-center justify-center">
+              <span class="text-xl font-black text-neutral-800">◄</span>
+            </button>
+          </div>
+          <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">◄ Preset -</span>
+        </div>
+
+        <!-- Footswitch 2: ► -->
+        <div class="flex flex-col items-center gap-2">
+          <div id="haloFs2" class="halo-led-ring text-rose-500 transition-all">
+            <button id="fs2" class="footswitch-hw flex items-center justify-center">
+              <span class="text-xl font-black text-neutral-800">►</span>
+            </button>
+          </div>
+          <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">► Preset +</span>
+        </div>
+
+        <!-- Footswitch 3: CTRL -->
+        <div class="flex flex-col items-center gap-2">
+          <div id="haloFs3" class="halo-led-ring text-amber-400 transition-all">
+            <button id="fs3" class="footswitch-hw flex items-center justify-center">
+              <span class="text-sm font-black text-neutral-800 tracking-tighter">CTRL</span>
+            </button>
+          </div>
+          <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">CTRL (Tap/Hold)</span>
+        </div>
       </div>
 
     </div>
 
-    <!-- 3 FOOTSWITCHES REAIS DE METAL COM HALO LED COLORIDO -->
-    <div class="grid grid-cols-3 gap-6 pt-4 px-8 border-t border-neutral-800">
-      
-      <!-- FOOTSWITCH 1 -->
-      <div class="flex flex-col items-center gap-2">
-        <div id="halo1" class="rounded-full p-2 text-cyan-400 halo-led transition-all">
-          <div id="fs1" class="footswitch flex items-center justify-center">
-            <div class="w-4 h-4 rounded-full border border-neutral-400/30"></div>
-          </div>
+    <!-- PEDAL DE EXPRESSÃO INTEGRADO NA DIREITA (Página 5, item 11!) -->
+    <div class="flex flex-col items-center gap-2">
+      <div class="exp-pedal p-3 flex flex-col justify-between items-center">
+        <!-- Topo da pisada do pedal -->
+        <div class="w-full flex justify-center">
+          <span class="text-[8px] font-bold text-neutral-500 tracking-widest uppercase">EXP 1 (Toe / Heel)</span>
         </div>
-        <span class="text-xs font-bold text-neutral-400 uppercase tracking-wider">FS 1 (FX 1)</span>
-      </div>
-
-      <!-- FOOTSWITCH 2 -->
-      <div class="flex flex-col items-center gap-2">
-        <div id="halo2" class="rounded-full p-2 text-rose-500 halo-led transition-all">
-          <div id="fs2" class="footswitch flex items-center justify-center">
-            <div class="w-4 h-4 rounded-full border border-neutral-400/30"></div>
-          </div>
+        <!-- Logo SONICAKE em relevo no pedal de expressão -->
+        <div class="bg-neutral-900 border-2 border-neutral-700 px-4 py-2 rounded-lg shadow-inner">
+          <span class="chakra font-black text-lg tracking-widest text-neutral-300">SONICAKE</span>
         </div>
-        <span class="text-xs font-bold text-neutral-400 uppercase tracking-wider">FS 2 (FX 2)</span>
-      </div>
-
-      <!-- FOOTSWITCH 3 -->
-      <div class="flex flex-col items-center gap-2">
-        <div id="halo3" class="rounded-full p-2 text-amber-400 halo-led transition-all">
-          <div id="fs3" class="footswitch flex items-center justify-center">
-            <div class="w-4 h-4 rounded-full border border-neutral-400/30"></div>
-          </div>
+        <!-- Base do pedal -->
+        <div class="w-full flex justify-center">
+          <div class="w-8 h-2 bg-neutral-800 rounded border border-neutral-700"></div>
         </div>
-        <span class="text-xs font-bold text-neutral-400 uppercase tracking-wider">FS 3 (AMP)</span>
       </div>
-
+      <span class="text-[9px] font-bold text-neutral-400 uppercase">Expressão / Wah</span>
     </div>
 
   </div>
 
-  <!-- CONTROLES DE SIMULAÇÃO DE ÁUDIO -->
-  <div class="w-full max-w-3xl bg-neutral-900 border border-neutral-800 rounded-2xl p-4 mt-4 space-y-3">
+  <!-- PAINEL DE CONTROLE DE ÁUDIO E TESTES INTERATIVOS -->
+  <div class="w-full max-w-4xl bg-neutral-900 border border-neutral-800 rounded-2xl p-4 mt-4 space-y-3">
     <div class="flex justify-between items-center text-xs">
-      <span class="font-bold text-neutral-300">Testar Comportamento das Linhas L || R</span>
-      <span id="txtAudioPattern" class="text-emerald-400 font-mono">Modo: Ping-Pong Delay (L ⇄ R)</span>
+      <span class="font-bold text-neutral-300">Testar o Comportamento das Linhas de Áudio no Topo</span>
+      <span id="txtAudioDesc" class="text-emerald-400 font-mono">Modo: Ping-Pong Delay (L ⇄ R)</span>
     </div>
-    
+
     <div class="grid grid-cols-3 gap-3">
-      <button id="btnPingPong" class="py-2 px-3 rounded-lg bg-emerald-950/60 border border-emerald-500/50 text-emerald-300 text-xs font-bold hover:bg-emerald-900/60 transition">
-        🏓 Ping-Pong Delay
+      <button id="btnAudioPingPong" class="py-2 px-3 rounded-lg bg-emerald-950/70 border border-emerald-500/60 text-emerald-300 text-xs font-bold hover:bg-emerald-900/60 transition">
+        🏓 Ping-Pong Delay (L ⇄ R)
       </button>
-      <button id="btnReverb" class="py-2 px-3 rounded-lg bg-neutral-800 border border-neutral-700 text-neutral-200 text-xs font-bold hover:border-neutral-500 transition">
-        🌌 Reverb Estéreo
+      <button id="btnAudioReverb" class="py-2 px-3 rounded-lg bg-neutral-800 border border-neutral-700 text-neutral-300 text-xs font-bold hover:border-neutral-500 transition">
+        🌌 Reverb Estéreo Espacial
       </button>
-      <button id="btnStrum" class="py-2 px-3 rounded-lg bg-amber-950/60 border border-amber-500/50 text-amber-300 text-xs font-bold hover:bg-amber-900/60 transition">
+      <button id="btnAudioStrum" class="py-2 px-3 rounded-lg bg-amber-950/70 border border-amber-500/60 text-amber-300 text-xs font-bold hover:bg-amber-900/60 transition">
         🎸 Palhetada Forte (Peak)
       </button>
     </div>
@@ -314,218 +529,215 @@
     <div class="space-y-1 pt-1">
       <div class="flex justify-between text-xs text-neutral-400">
         <span>Canal L (Esquerda)</span>
-        <span id="txtPan" class="font-mono text-neutral-200 font-bold">Balanço Central (50 / 50)</span>
+        <span id="txtPanLabel" class="font-mono text-neutral-200 font-bold">Balanço Central (50 / 50)</span>
         <span>Canal R (Direita)</span>
       </div>
-      <input id="panSlider" type="range" min="0" max="100" value="50" class="w-full h-2 bg-neutral-800 rounded-lg appearance-none cursor-pointer accent-emerald-500">
-    </div>
-  </div>
-
-  <!-- MODAL / GAVETA COM OS 168 ASSETS REAIS DO FIRMWARE -->
-  <div id="galleryModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-6">
-    <div class="bg-neutral-900 border border-neutral-700 rounded-2xl w-full max-w-4xl max-h-[85vh] flex flex-col p-6 shadow-2xl">
-      <div class="flex justify-between items-center pb-4 border-b border-neutral-800">
-        <div>
-          <h2 class="text-lg font-bold text-neutral-100">Galeria de Assets Oficiais Extraídos do Firmware</h2>
-          <p class="text-xs text-neutral-400">168 ícones e imagens originais extraídos diretamente da Partição 0 (NXP i.MX RT SDRAM)</p>
-        </div>
-        <button id="btnCloseGallery" class="px-3 py-1 rounded bg-neutral-800 hover:bg-neutral-700 text-neutral-300 text-xs font-bold">
-          Fechar ✕
-        </button>
-      </div>
-      <div id="galleryGrid" class="grid grid-cols-8 gap-3 py-4 overflow-y-auto max-h-[60vh] pr-2">
-        <!-- Injetado dinamicamente via JS -->
-      </div>
+      <input id="sliderBalance" type="range" min="0" max="100" value="50" class="w-full h-2 bg-neutral-800 rounded-lg appearance-none cursor-pointer accent-emerald-500">
     </div>
   </div>
 
   <script>
-    const DOTS = 14;
-    let mode = 'pingpong';
-    let pan = 0.5;
-    let phase = 0;
-    let inLevel = 0.5;
-    let lLevel = 0;
-    let rLevel = 0;
+    const DOTS_COUNT = 16;
+    let audioMode = 'pingpong';
+    let balance = 0.5;
+    let animPhase = 0;
+    let inVal = 0.5;
+    let lVal = 0;
+    let rVal = 0;
+    let isStompView = false;
 
-    // Estado dos Pedais (Ligar/Desligar) e Consumo de DSP
-    const pedals = {
-      fx1: { on: true, cost: 8, el: document.getElementById('pedalFx1'), halo: document.getElementById('halo1') },
-      rvb: { on: true, cost: 20, el: document.getElementById('pedalRvb'), halo: null },
-      fx2: { on: true, cost: 12, el: document.getElementById('pedalFx2'), halo: document.getElementById('halo2') },
-      amp: { on: true, cost: 24, el: document.getElementById('pedalAmp'), halo: document.getElementById('halo3') }
-    };
-
-    // Montar os dots dos medidores
-    function makeDots(container, isDual) {
+    // Criar os pontos horizontais de VU
+    function renderVuBar(container, count) {
       container.innerHTML = '';
-      for (let i = 0; i < DOTS; i++) {
+      for (let i = 0; i < count; i++) {
         const d = document.createElement('div');
-        d.className = (isDual ? 'led-dot-dual' : 'led-dot-single') + ' led-off';
+        d.className = 'vu-dot vu-off';
         container.appendChild(d);
       }
     }
 
-    const meterIn = document.getElementById('meterIn');
-    const meterL = document.getElementById('meterL');
-    const meterR = document.getElementById('meterR');
-    makeDots(meterIn, false);
-    makeDots(meterL, true);
-    makeDots(meterR, true);
+    const vuIn = document.getElementById('vuIn');
+    const vuOutL = document.getElementById('vuOutL');
+    const vuOutR = document.getElementById('vuOutR');
 
-    function setMeter(container, val, isDual) {
-      const active = Math.round(val * DOTS);
-      const dots = container.querySelectorAll(isDual ? '.led-dot-dual' : '.led-dot-single');
+    renderVuBar(vuIn, 18);
+    renderVuBar(vuOutL, 16);
+    renderVuBar(vuOutR, 16);
+
+    function updateVuDots(container, level, total) {
+      const active = Math.round(level * total);
+      const dots = container.querySelectorAll('.vu-dot');
       dots.forEach((dot, idx) => {
-        dot.className = isDual ? 'led-dot-dual' : 'led-dot-single';
+        dot.className = 'vu-dot';
         if (idx < active) {
-          if (idx >= 12) dot.classList.add('led-red');
-          else if (idx >= 9) dot.classList.add('led-yellow');
-          else dot.classList.add('led-green');
+          if (idx >= total - 2) dot.classList.add('vu-red');
+          else if (idx >= total - 5) dot.classList.add('vu-yellow');
+          else dot.classList.add('vu-green');
         } else {
-          dot.classList.add('led-off');
+          dot.classList.add('vu-off');
         }
       });
     }
 
-    // Carregar Ícones Reais Extraídos
-    if (window.MATRIBOX_ASSETS) {
-      const keys = Object.keys(window.MATRIBOX_ASSETS);
-      // Atribuir ícones reais aos pedais
-      if (keys[0]) document.getElementById('iconFx1').src = window.MATRIBOX_ASSETS[keys[0]].dataUrl;
-      if (keys[1]) document.getElementById('iconRvb').src = window.MATRIBOX_ASSETS[keys[1]].dataUrl;
-      if (keys[2]) document.getElementById('iconFx2').src = window.MATRIBOX_ASSETS[keys[2]].dataUrl;
-      if (keys[3]) document.getElementById('iconAmp').src = window.MATRIBOX_ASSETS[keys[3]].dataUrl;
+    // Alternar entre Preset Mode e Stomp Mode (Manual página 6 e 7)
+    const btnSwitch = document.getElementById('btnSwitchDisplayMode');
+    const viewPreset = document.getElementById('viewPresetMode');
+    const viewStomp = document.getElementById('viewStompMode');
+    const badgeMode = document.getElementById('badgeFsMode');
 
-      // Montar a galeria completa
-      const grid = document.getElementById('galleryGrid');
-      keys.forEach((k, idx) => {
-        const item = window.MATRIBOX_ASSETS[k];
-        const card = document.createElement('div');
-        card.className = 'bg-neutral-800 p-2 rounded flex flex-col items-center justify-center border border-neutral-700';
-        card.innerHTML = `
-          <img src="${item.dataUrl}" class="max-h-12 object-contain mb-1" alt="${k}">
-          <span class="text-[9px] font-mono text-neutral-400 truncate w-full text-center">${item.width}x${item.height}</span>
-          <span class="text-[8px] font-mono text-neutral-400">#${idx + 1}</span>
-        `;
-        grid.appendChild(card);
-      });
-    }
+    btnSwitch.onclick = () => {
+      isStompView = !isStompView;
+      if (isStompView) {
+        viewPreset.classList.add('hidden');
+        viewStomp.classList.remove('hidden');
+        viewStomp.classList.add('flex');
+        badgeMode.textContent = 'Modo Stomp';
+      } else {
+        viewStomp.classList.add('hidden');
+        viewStomp.classList.remove('flex');
+        viewPreset.classList.remove('hidden');
+        badgeMode.textContent = 'Modo Preset';
+      }
+    };
 
-    // Recalcular consumo de DSP %
-    function updateDsp() {
-      let total = 14; // Base do SO
-      if (pedals.fx1.on) total += pedals.fx1.cost;
-      if (pedals.rvb.on) total += pedals.rvb.cost;
-      if (pedals.fx2.on) total += pedals.fx2.cost;
-      if (pedals.amp.on) total += pedals.amp.cost;
+    // Módulos e Consumo de DSP
+    const moduleCosts = {
+      fx1: 8, fx2: 12, amp: 24, nr: 4, cab: 10, eq: 6, mod: 14, dly: 16, rvb: 20
+    };
+    const moduleStates = {
+      fx1: true, fx2: true, amp: true, nr: true, cab: true, eq: true, mod: true, dly: true, rvb: true
+    };
 
-      const txt = document.getElementById('txtDspVal');
-      const badge = document.getElementById('badgeDsp');
-      txt.textContent = total + '%';
+    function recalculateDsp() {
+      let total = 12; // Base OS
+      for (const [k, v] of Object.entries(moduleStates)) {
+        if (v) total += moduleCosts[k];
+      }
+      total = Math.min(100, total);
+
+      const dspVal = document.getElementById('dspValue');
+      const dspChip = document.getElementById('dspChip');
+      dspVal.textContent = total + '%';
 
       if (total >= 85) {
-        badge.className = 'flex items-center gap-1.5 px-2.5 py-0.5 rounded border border-rose-500/70 bg-rose-950/60 text-rose-300 font-mono text-xs font-bold shadow-sm';
+        dspChip.className = 'px-2 py-0.5 rounded border border-rose-500/70 bg-rose-950/80 text-rose-300 font-mono text-[10px] font-bold shadow flex items-center gap-1';
       } else if (total >= 65) {
-        badge.className = 'flex items-center gap-1.5 px-2.5 py-0.5 rounded border border-amber-500/70 bg-amber-950/60 text-amber-300 font-mono text-xs font-bold shadow-sm';
+        dspChip.className = 'px-2 py-0.5 rounded border border-amber-500/70 bg-amber-950/80 text-amber-300 font-mono text-[10px] font-bold shadow flex items-center gap-1';
       } else {
-        badge.className = 'flex items-center gap-1.5 px-2.5 py-0.5 rounded border border-emerald-500/70 bg-emerald-950/60 text-emerald-300 font-mono text-xs font-bold shadow-sm';
+        dspChip.className = 'px-2 py-0.5 rounded border border-emerald-500/70 bg-emerald-950/80 text-emerald-300 font-mono text-[10px] font-bold shadow flex items-center gap-1';
       }
     }
 
-    function togglePedal(key) {
-      const p = pedals[key];
-      p.on = !p.on;
-      if (p.on) {
-        p.el.classList.remove('opacity-40', 'grayscale');
-        if (p.halo) p.halo.classList.add('halo-led');
-      } else {
-        p.el.classList.add('opacity-40', 'grayscale');
-        if (p.halo) p.halo.classList.remove('halo-led');
-      }
-      updateDsp();
-    }
+    // Botões dos 9 módulos da linha de baixo
+    document.querySelectorAll('.module-capsule').forEach(btn => {
+      btn.onclick = () => {
+        const mod = btn.dataset.mod;
+        moduleStates[mod] = !moduleStates[mod];
+        if (moduleStates[mod]) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+        recalculateDsp();
+      };
+    });
 
-    document.getElementById('pedalFx1').onclick = () => togglePedal('fx1');
-    document.getElementById('pedalRvb').onclick = () => togglePedal('rvb');
-    document.getElementById('pedalFx2').onclick = () => togglePedal('fx2');
-    document.getElementById('pedalAmp').onclick = () => togglePedal('amp');
-
-    document.getElementById('fs1').onclick = () => togglePedal('fx1');
-    document.getElementById('fs2').onclick = () => togglePedal('fx2');
-    document.getElementById('fs3').onclick = () => togglePedal('amp');
-
-    // Botões de áudio
-    const txtPattern = document.getElementById('txtAudioPattern');
-    document.getElementById('btnPingPong').onclick = () => {
-      mode = 'pingpong';
-      txtPattern.textContent = 'Modo: Ping-Pong Delay (L ⇄ R)';
+    // Controles de áudio
+    const txtDesc = document.getElementById('txtAudioDesc');
+    document.getElementById('btnAudioPingPong').onclick = () => {
+      audioMode = 'pingpong';
+      txtDesc.textContent = 'Modo: Ping-Pong Delay (L ⇄ R)';
     };
-    document.getElementById('btnReverb').onclick = () => {
-      mode = 'reverb';
-      txtPattern.textContent = 'Modo: Reverb Estéreo Amplo';
+    document.getElementById('btnAudioReverb').onclick = () => {
+      audioMode = 'reverb';
+      txtDesc.textContent = 'Modo: Reverb Estéreo Espacial';
     };
-    document.getElementById('btnStrum').onclick = () => {
-      mode = 'strum';
-      inLevel = 0.95;
-      lLevel = 0.92;
-      rLevel = 0.89;
-      txtPattern.textContent = 'Modo: Palhetada Forte (Peak)';
+    document.getElementById('btnAudioStrum').onclick = () => {
+      audioMode = 'strum';
+      inVal = 0.95;
+      lVal = 0.90;
+      rVal = 0.88;
+      txtDesc.textContent = 'Modo: Palhetada Forte (Peak)';
     };
 
-    const panSlider = document.getElementById('panSlider');
-    const txtPan = document.getElementById('txtPan');
-    panSlider.oninput = (e) => {
-      mode = 'manual';
+    const slider = document.getElementById('sliderBalance');
+    const txtPan = document.getElementById('txtPanLabel');
+    slider.oninput = (e) => {
+      audioMode = 'manual';
       const v = parseInt(e.target.value);
-      pan = v / 100;
+      balance = v / 100;
       txtPan.textContent = v === 50 ? 'Balanço Central (50 / 50)' : `L: ${100 - v}% | R: ${v}%`;
-      txtPattern.textContent = 'Modo: Controle Manual de Pan';
+      txtDesc.textContent = 'Modo: Controle Manual de Balanço (Pan)';
     };
 
-    // Modal Galeria
-    const modal = document.getElementById('galleryModal');
-    document.getElementById('btnToggleAssetGallery').onclick = () => modal.classList.remove('hidden');
-    document.getElementById('btnCloseGallery').onclick = () => modal.classList.add('hidden');
+    // Knobs de ajuste rápido (Tone, Gain, Preset VOL)
+    let k1Val = 30, k2Val = 15, k3Val = 50;
+    document.getElementById('quickKnob1').onclick = () => {
+      k1Val = (k1Val + 10) % 100;
+      document.getElementById('valKnob1').textContent = k1Val;
+      document.getElementById('barKnob1').style.width = k1Val + '%';
+    };
+    document.getElementById('quickKnob2').onclick = () => {
+      k2Val = (k2Val + 10) % 100;
+      document.getElementById('valKnob2').textContent = k2Val;
+      document.getElementById('barKnob2').style.width = k2Val + '%';
+    };
+    document.getElementById('quickKnob3').onclick = () => {
+      k3Val = (k3Val + 10) % 100;
+      document.getElementById('valKnob3').textContent = k3Val;
+      document.getElementById('barKnob3').style.width = k3Val + '%';
+    };
 
-    // Loop de Animação Real (60fps)
-    let last = performance.now();
-    function loop(now) {
-      const dt = (now - last) / 1000;
-      last = now;
+    // Footswitches
+    let currentPresetIdx = 0;
+    const presets = ['01 A', '01 B', '01 C', '02 A', '02 B', '02 C'];
+    document.getElementById('fs1').onclick = () => {
+      currentPresetIdx = (currentPresetIdx - 1 + presets.length) % presets.length;
+      document.getElementById('txtPresetNum').textContent = presets[currentPresetIdx];
+    };
+    document.getElementById('fs2').onclick = () => {
+      currentPresetIdx = (currentPresetIdx + 1) % presets.length;
+      document.getElementById('txtPresetNum').textContent = presets[currentPresetIdx];
+    };
 
-      inLevel = 0.45 + Math.sin(now * 0.006) * 0.12;
+    // Loop de Animação 60fps
+    let lastTime = performance.now();
+    function animate(now) {
+      const dt = (now - lastTime) / 1000;
+      lastTime = now;
 
-      if (mode === 'pingpong') {
-        phase += dt * 3.4;
-        const s = Math.sin(phase);
-        const l = Math.max(0, s);
-        const r = Math.max(0, -s);
+      inVal = 0.45 + Math.sin(now * 0.006) * 0.14;
+
+      if (audioMode === 'pingpong') {
+        animPhase += dt * 3.4;
+        const wave = Math.sin(animPhase);
+        const lWeight = Math.max(0, wave);
+        const rWeight = Math.max(0, -wave);
         const amp = 0.55 + Math.sin(now * 0.005) * 0.15;
-        lLevel = Math.min(1, l * amp * 1.6 + 0.1);
-        rLevel = Math.min(1, r * amp * 1.6 + 0.1);
-      } else if (mode === 'reverb') {
-        lLevel = Math.sin(now * 0.005) * 0.22 + 0.58;
-        rLevel = Math.cos(now * 0.006) * 0.20 + 0.56;
-      } else if (mode === 'strum') {
-        inLevel = Math.max(0.2, inLevel - dt * 1.2);
-        lLevel = Math.max(0.1, lLevel - dt * 1.15);
-        rLevel = Math.max(0.1, rLevel - dt * 1.1);
-        if (lLevel < 0.2 && rLevel < 0.2) mode = 'pingpong';
-      } else if (mode === 'manual') {
+        lVal = Math.min(1, lWeight * amp * 1.6 + 0.1);
+        rVal = Math.min(1, rWeight * amp * 1.6 + 0.1);
+      } else if (audioMode === 'reverb') {
+        lVal = Math.sin(now * 0.005) * 0.22 + 0.58;
+        rVal = Math.cos(now * 0.006) * 0.20 + 0.56;
+      } else if (audioMode === 'strum') {
+        inVal = Math.max(0.15, inVal - dt * 1.2);
+        lVal = Math.max(0.1, lVal - dt * 1.15);
+        rVal = Math.max(0.1, rVal - dt * 1.1);
+        if (lVal < 0.2 && rVal < 0.2) audioMode = 'pingpong';
+      } else if (audioMode === 'manual') {
         const sig = 0.7 + Math.sin(now * 0.008) * 0.1;
-        lLevel = sig * (1 - pan) * 1.6;
-        rLevel = sig * pan * 1.6;
+        lVal = sig * (1 - balance) * 1.6;
+        rVal = sig * balance * 1.6;
       }
 
-      setMeter(meterIn, Math.min(1, Math.max(0, inLevel)), false);
-      setMeter(meterL, Math.min(1, Math.max(0, lLevel)), true);
-      setMeter(meterR, Math.min(1, Math.max(0, rLevel)), true);
+      updateVuDots(vuIn, Math.min(1, Math.max(0, inVal)), 18);
+      updateVuDots(vuOutL, Math.min(1, Math.max(0, lVal)), 16);
+      updateVuDots(vuOutR, Math.min(1, Math.max(0, rVal)), 16);
 
-      requestAnimationFrame(loop);
+      requestAnimationFrame(animate);
     }
-    requestAnimationFrame(loop);
-    updateDsp();
+    requestAnimationFrame(animate);
+    recalculateDsp();
   </script>
 </body>
 </html>
