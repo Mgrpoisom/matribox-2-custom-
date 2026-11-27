@@ -1,21 +1,20 @@
 /**
- * APLICADOR DE TRADUÇÃO PT-BR COM GUARDRAILS
+ * APLICADOR DE TRADUÇÃO PT-BR COM GUARDRAILS ESTRITOS
  * Autores: Mgrpoisom & CesarMalak
- * 
- * Regra: Null-Padding estrito para não alterar nenhum ponteiro de memória.
  */
 
 const fs = require('fs');
 const path = require('path');
 
 function applyPtBrTranslation(inputFile, outputFile, dictFile) {
-    console.log('=== APLICADOR DE TRADUÇÃO PT-BR (GUARDRAIL NÍVEL 1) ===\n');
-    console.log(`[*] Arquivo de entrada: ${inputFile}`);
-    console.log(`[*] Dicionário:         ${dictFile}`);
+    console.log('====================================================');
+    console.log('    APLICADOR DE TRADUÇÃO PT-BR (GUARDRAIL NÍVEL 1) ');
+    console.log('    Autores: Mgrpoisom & CesarMalak                 ');
+    console.log('====================================================\n');
 
     if (!fs.existsSync(inputFile)) {
         console.error(`[-] Arquivo não encontrado: ${inputFile}`);
-        return;
+        return false;
     }
 
     const dict = JSON.parse(fs.readFileSync(dictFile, 'utf8'));
@@ -32,10 +31,11 @@ function applyPtBrTranslation(inputFile, outputFile, dictFile) {
             return;
         }
 
-        // Preenche com bytes nulos para manter o tamanho idêntico
-        const paddedTarget = Buffer.alloc(origBuffer.length, 0);
+        // Preenche exatamente o tamanho com espaços ou nulos para não deslocar a memória
+        const paddedTarget = Buffer.alloc(origBuffer.length, 0x20); // Espaços
         targetBuffer.copy(paddedTarget);
 
+        // Se original terminava com \0, manter \0 no final
         let pos = 0;
         while ((pos = buffer.indexOf(origBuffer, pos)) !== -1) {
             console.log(`[+] Substituindo em 0x${pos.toString(16).toUpperCase()}: "${originalStr}" -> "${targetStr}"`);
@@ -45,10 +45,11 @@ function applyPtBrTranslation(inputFile, outputFile, dictFile) {
         }
     });
 
-    console.log(`\n[OK] Total de strings traduzidas: ${patchedCount}`);
+    console.log(`\n[OK] Total de strings aplicadas: ${patchedCount}`);
     fs.mkdirSync(path.dirname(outputFile), { recursive: true });
     fs.writeFileSync(outputFile, buffer);
-    console.log(`[+] Novo firmware gerado em: ${outputFile}`);
+    console.log(`[+] Novo firmware gerado em:\n -> ${outputFile}`);
+    return true;
 }
 
 const inFw = 'F:\\a-projetos\\matribox 2 custom\\QME-100_FW_USB_V1.3.0.bin';
