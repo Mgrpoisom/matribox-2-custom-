@@ -26,6 +26,6 @@ Aqui você encontra os links de download direto das imagens de firmware modifica
 * **Arquivo:** `QME-100_WHITELED_V1.3.0.bin`
 * **Download Direto:** [Clique para Baixar QME-100_WHITELED_V1.3.0.bin](https://github.com/Mgrpoisom/matribox-2-custom-/raw/main/firmware/modified/QME-100_WHITELED_V1.3.0.bin)
 * **Tamanho:** `5.447.156 bytes`
-* **SHA-256:** `619420E932E69CA14DD651FACA095DE1534AAD5A33774E9C94E747D6481F9B05`
-* **Base:** Firmware Oficial Sonicake QME-100 V1.3.0 + PT-BR 105 termos + Patch cirúrgico de enum de cor de LED (`0x04` Amarelo -> `0x07` Branco Puro no offset `0x2CCBA`).
+* **SHA-256:** `D5E7A0416F7B621E872EF471F0AF3D7AC5B921479C116B22B8339077F2C74BB4`
+* **Base:** Firmware Oficial Sonicake QME-100 V1.3.0 + PT-BR 105 termos + Patch cirúrgico dos 8 slots de cores de hardware RGB float do Footswitch (Amarelo R=1, G=1, B=0 -> Branco Puro R=1, G=1, B=1).
 * **Segurança:** Aprovado 100% pelo `guardrail.js`. Zero alterações na GUI/LCD.
